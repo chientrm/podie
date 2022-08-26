@@ -8,7 +8,6 @@ interface User {
 declare namespace App {
 	interface Locals {
 		user: User | undefined;
-		supabase: import('@supabase/supabase-js').SupabaseClient;
 	}
 	// interface PageData {}
 	// interface Platform {}
