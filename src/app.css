@@ -1,0 +1,29 @@
+a {
+	text-decoration: none;
+}
+a:visited {
+	color: blue;
+}
+button,
+input[type='submit'] {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	padding: 1em;
+	gap: 0.5em;
+}
+input {
+	padding: 0.5em;
+}
+form {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 1em;
+}
+label {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 0.5em;
+}
