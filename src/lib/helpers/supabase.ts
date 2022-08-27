@@ -6,3 +6,6 @@ const supabase = createClient(config.url, config.key, {
 });
 
 export const letusknow = supabase.from<{ email: string }>('letusknow');
+export const crashes = supabase.from<{ event: string; error: string }>(
+	'crashes'
+);
