@@ -39,7 +39,7 @@
 		<a href={routes.GITHUB.REPO} target="_blank">{strings.GITHUB}</a>
 		{#if data.user}
 			<Anchor href={routes.WORKSPACES}>{strings.WORKSPACES}</Anchor>
-			<!-- <img src={data.user.avatar_url} alt={strings.AVATAR} /> -->
+			<img src={data.user.avatar_url} alt={strings.AVATAR} />
 		{:else}
 			<a href={routes.GITHUB.AUTHORIZE({ client_id, scope })}>
 				{strings.LOGIN}
@@ -68,9 +68,9 @@
 		align-items: center;
 		gap: 1em;
 	}
-	/* img {
+	img {
 		width: 32px;
 		height: 32px;
 		border-radius: 50%;
-	} */
+	}
 </style>
