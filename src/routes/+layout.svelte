@@ -12,7 +12,7 @@
 	import type { LayoutServerData } from './$types';
 
 	export let data: LayoutServerData;
-	const scope = ['read:user', 'repo:status'].join(' ');
+	const scope = ['repo:status'].join(' ');
 
 	const gsiteVerification = 'gG8WXVPtqVVAJlnJb5v0LlC0-HBSCVSWsVqa7KHwTPA';
 </script>
