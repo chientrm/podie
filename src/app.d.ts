@@ -1,8 +1,5 @@
 interface User {
-	user_id: string;
-	email: string;
-	name: string;
-	picture: string;
+	avatar_url: string;
 }
 
 declare namespace App {

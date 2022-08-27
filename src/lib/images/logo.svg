@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" height="120" width="120">
+    <rect width="120" height="120" fill="blue" />
+    <text x="15" y="70" fill="white" font-size="30" font-family="monospace">
+        Podie
+    </text>
+</svg>

@@ -1,3 +1,3 @@
 # Podie
 
-Basically like Gitpod.io and Codespace with some tweaks 👍
+It's like Gitpod.io and Codespace but running on your own infrastructure 👍.

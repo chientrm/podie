@@ -1,5 +1,4 @@
 import routes from '$lib/constants/routes';
-import { send } from '$lib/helpers/mailer';
 import { letusknow } from '$lib/helpers/supabase';
 import { redirect } from '@sveltejs/kit';
 import type { Action } from './$types';
@@ -11,18 +10,5 @@ export const POST: Action = async ({ request }) => {
 	if (error) {
 		throw error;
 	}
-	const res = await send(
-		email,
-		'Say hi from Podie',
-		`Hi there 👋👋👋,
-
-Thank you so much for joining us 🍻🍻🍻
-        
-Podie is currently experimental. We'll inform you as soon as possible!
-
-Have a good day,
-	`
-	);
-	console.log(res);
 	throw redirect(302, routes.THANK(email).GET);
 };

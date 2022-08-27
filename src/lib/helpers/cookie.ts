@@ -1,6 +1,6 @@
 import { parse, serialize } from 'cookie';
 
-const ID_TOKEN = 'idToken';
+const ACCESS_TOKEN = 'access_token';
 
 const setCookie = (name: string, value: string) => ({
 	'Set-Cookie': serialize(name, value, {
@@ -11,9 +11,10 @@ const setCookie = (name: string, value: string) => ({
 	})
 });
 
-export const parseIdToken = (cookieString: string) =>
-	parse(cookieString)[ID_TOKEN];
+export const parse_access_otken = (cookie: string) =>
+	parse(cookie)[ACCESS_TOKEN];
 
-export const login = (idToken: string) => setCookie(ID_TOKEN, idToken);
+export const login = (access_token: string) =>
+	setCookie(ACCESS_TOKEN, access_token);
 
-export const LOGOUT = setCookie(ID_TOKEN, '');
+export const LOGOUT = setCookie(ACCESS_TOKEN, '');
