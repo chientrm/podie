@@ -5,8 +5,8 @@ export const get_access_token = (code: string) =>
 	fetch(routes.GITHUB.ACCESS_TOKEN({ client_id, client_secret, code }), {
 		headers: { Accept: 'application/json' }
 	})
-		.then((res) => res.json())
-		.then((data) => data.access_token as string);
+		.then((res) => res.json<{ access_token: string }>())
+		.then((data) => data.access_token);
 
 export const get_user = (access_token: string) =>
 	fetch(routes.GITHUB.USER, {
@@ -15,8 +15,8 @@ export const get_user = (access_token: string) =>
 			Authorization: `token ${access_token}`
 		}
 	})
-		.then((res) => res.json())
+		.then((res) => res.json<any>())
 		.then((data) => {
-			const user = { avatar_url: data.avatar_url as string };
+			const user = { ...data, username: data.login };
 			return user;
 		});

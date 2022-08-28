@@ -20,5 +20,6 @@ export default {
 		'Github',
 		'Container',
 		'Azure'
-	]
+	],
+	OOPS: 'Oops. Something went wrong!'
 };

@@ -1,10 +1,6 @@
-interface User {
-	avatar_url: string;
-}
-
 declare namespace App {
 	interface Locals {
-		user: User | undefined;
+		user: import('@sentry/types').User | undefined;
 	}
 	// interface PageData {}
 	// interface Platform {}
