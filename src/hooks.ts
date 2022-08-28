@@ -1,6 +1,6 @@
 import { dsn, environment } from '$lib/configs/sentry.json';
 import strings from '$lib/constants/strings';
-import { parse_access_otken } from '$lib/helpers/cookie';
+import { parse_access_token } from '$lib/helpers/cookie';
 import { get_user } from '$lib/helpers/github';
 import type { Handle } from '@sveltejs/kit';
 import Toucan from 'toucan-js';
@@ -16,7 +16,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 			environment
 		});
 	try {
-		const access_token = parse_access_otken(
+		const access_token = parse_access_token(
 			event.request.headers.get('cookie') || ''
 		);
 		if (access_token?.length) {

@@ -11,7 +11,7 @@ const setCookie = (name: string, value: string) => ({
 	})
 });
 
-export const parse_access_otken = (cookie: string) =>
+export const parse_access_token = (cookie: string) =>
 	parse(cookie)[ACCESS_TOKEN];
 
 export const login = (access_token: string) =>
