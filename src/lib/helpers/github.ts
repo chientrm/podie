@@ -32,6 +32,6 @@ export const get_user = (access_token: string) =>
 		.then((data) => ({ ...data, username: data.login }));
 
 export const list_repoes = (access_token: string) =>
-	f(routes.GITHUB.REPO, access_token).then((res) =>
+	f(routes.GITHUB.REPOS, access_token).then((res) =>
 		res.json<{ full_name: string; html_url: string }[]>()
 	);

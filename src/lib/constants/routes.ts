@@ -30,6 +30,6 @@ export default {
 			return url.href;
 		},
 		USER: 'https://api.github.com/user',
-		REPO: 'https://api.github.com/user/repos'
+		REPOS: 'https://api.github.com/user/repos'
 	}
 };
