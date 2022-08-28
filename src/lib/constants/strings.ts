@@ -11,7 +11,7 @@ export default {
 	UNDER_CONSTRUCTION: '...under contruction...',
 	TITLE: 'Remote dev | Podie',
 	DESCRIPTION:
-		"It's like Gitpod.io and Codespace but running on your own infrastructure 👍.",
+		"It's like Gitpod.io and Codespace but running on your own infrastructure and don't need to setup cluster 👍.",
 	KEYWORDS: [
 		'Remote',
 		'Development',

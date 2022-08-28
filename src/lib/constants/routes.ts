@@ -29,6 +29,7 @@ export default {
 			url.searchParams.append('code', code);
 			return url.href;
 		},
-		USER: 'https://api.github.com/user'
+		USER: 'https://api.github.com/user',
+		REPOS: 'https://api.github.com/user/repos?per_page=100'
 	}
 };

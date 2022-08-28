@@ -11,8 +11,11 @@ const setCookie = (name: string, value: string) => ({
 	})
 });
 
-export const parse_access_otken = (cookie: string) =>
-	parse(cookie)[ACCESS_TOKEN];
+const parse_cookie = (request: Request, name: string) =>
+	parse(request.headers.get('cookie') || '')[name];
+
+export const parse_access_token = (request: Request) =>
+	parse_cookie(request, ACCESS_TOKEN);
 
 export const login = (access_token: string) =>
 	setCookie(ACCESS_TOKEN, access_token);
