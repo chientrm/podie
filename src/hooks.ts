@@ -1,5 +1,4 @@
 import { dsn, environment } from '$lib/configs/sentry.json';
-import strings from '$lib/constants/strings';
 import { parse_access_otken } from '$lib/helpers/cookie';
 import { get_user } from '$lib/helpers/github';
 import type { Handle } from '@sveltejs/kit';
@@ -29,7 +28,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		return resolve(event);
 	} catch (e) {
 		const event_id = sentry.captureException(e);
-		return new Response(strings.OOPS, {
+		return new Response(undefined, {
 			status: 500,
 			statusText: `event_id: ${event_id}`
 		});
