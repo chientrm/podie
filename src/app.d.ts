@@ -7,3 +7,13 @@ declare namespace App {
 	// interface PrivateEnv {}
 	// interface PublicEnv {}
 }
+
+declare namespace GCP {
+	interface Project {
+		projectNumber: number;
+		projectId: string;
+		lifecycleState: string;
+		name: string;
+		createTime: Date;
+	}
+}
