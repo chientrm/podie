@@ -16,9 +16,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 			environment
 		});
 	try {
-		const access_token = parse_access_token(
-			event.request.headers.get('cookie') || ''
-		);
+		const access_token = parse_access_token(event.request);
 		if (access_token?.length) {
 			event.locals.user = {
 				...(await get_user(access_token)),

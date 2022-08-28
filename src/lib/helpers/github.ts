@@ -17,14 +17,21 @@ export const get_access_token = (code: string) =>
 		.then((res) => res.json<{ access_token: string }>())
 		.then((data) => data.access_token);
 
-export const get_user = (access_token: string) =>
-	fetch(routes.GITHUB.USER, {
+const f = (url: string, access_token: string) =>
+	fetch(url, {
 		headers: {
 			Accept: 'application/vnd.github+json',
 			Authorization: `token ${access_token}`,
 			'User-Agent': strings.PODIE
 		}
-	})
-		.then(check_ok)
+	}).then(check_ok);
+
+export const get_user = (access_token: string) =>
+	f(routes.GITHUB.USER, access_token)
 		.then((res) => res.json<any>())
 		.then((data) => ({ ...data, username: data.login }));
+
+export const list_repoes = (access_token: string) =>
+	f(routes.GITHUB.REPO, access_token).then((res) =>
+		res.json<{ full_name: string; html_url: string }[]>()
+	);

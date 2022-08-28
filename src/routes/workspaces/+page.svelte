@@ -1,6 +1,12 @@
-<script>
-	import strings from '$lib/constants/strings';
+<script lang="ts">
+	import type { PageServerData } from './$types';
+	export let data: PageServerData;
 </script>
 
-<h1>👷 🚧🚧🚧 🚜🚜🚜 🧱🧱🧱 🚧🚧🚧 👷‍♀️</h1>
-<h1>{strings.UNDER_CONSTRUCTION}</h1>
+<ul>
+	{#each data.repoes as repo}
+		<li>
+			{repo.full_name}
+		</li>
+	{/each}
+</ul>
