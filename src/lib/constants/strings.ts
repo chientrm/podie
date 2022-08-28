@@ -11,7 +11,7 @@ export default {
 	UNDER_CONSTRUCTION: '...under contruction...',
 	TITLE: 'Remote dev | Podie',
 	DESCRIPTION:
-		"It's like Gitpod.io and Codespace but running on your own infrastructure and don't need to setup cluster 👍.",
+		"It's a bit like Gitpod.io and Codespace. You pick repo, choose machine type, region and KABOOM! 👍.",
 	KEYWORDS: [
 		'Remote',
 		'Development',
@@ -21,5 +21,8 @@ export default {
 		'Container',
 		'Azure'
 	],
-	OOPS: 'Oops. Something went wrong!'
+	OOPS: 'Oops. Something went wrong!',
+	CONNECT_GCP: 'Connect GCP',
+	REPOES: 'Repoes',
+	PROJECTS: 'Projects'
 };
