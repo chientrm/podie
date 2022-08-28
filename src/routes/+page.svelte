@@ -5,7 +5,6 @@
 </script>
 
 <p>{strings.DESCRIPTION}</p>
-<p>Also you can choose region and machine type.</p>
 <p>
 	Don't get me wrong, I love Gitpod.io and Codespace ❤️, been using them for
 	half a year.
