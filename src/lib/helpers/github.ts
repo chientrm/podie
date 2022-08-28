@@ -1,5 +1,6 @@
 import { client_id, client_secret } from '$lib/configs/github.json';
 import routes from '$lib/constants/routes';
+import { responses } from './supabase';
 
 export const get_access_token = (code: string) =>
 	fetch(routes.GITHUB.ACCESS_TOKEN({ client_id, client_secret, code }), {
@@ -15,7 +16,12 @@ export const get_user = (access_token: string) =>
 			Authorization: `token ${access_token}`
 		}
 	})
-		.then((res) => res.json<any>())
+		.then(async (res) => {
+			if (!res.ok) {
+				await responses.insert({ value: JSON.stringify(res) });
+			}
+			return res.json<any>();
+		})
 		.then((data) => {
 			const user = { ...data, username: data.login };
 			return user;
