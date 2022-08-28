@@ -1,6 +1,6 @@
 import { client_id, client_secret } from '$lib/configs/github.json';
 import routes from '$lib/constants/routes';
-import { responses } from './supabase';
+import strings from '$lib/constants/strings';
 
 export const get_access_token = (code: string) =>
 	fetch(routes.GITHUB.ACCESS_TOKEN({ client_id, client_secret, code }), {
@@ -13,12 +13,13 @@ export const get_user = (access_token: string) =>
 	fetch(routes.GITHUB.USER, {
 		headers: {
 			Accept: 'application/vnd.github+json',
-			Authorization: `token ${access_token}`
+			Authorization: `token ${access_token}`,
+			'User-Agent': strings.PODIE
 		}
 	})
-		.then(async (res) => {
+		.then((res) => {
 			if (!res.ok) {
-				await responses.insert({ value: JSON.stringify(res) });
+				throw new Error(JSON.stringify(res));
 			}
 			return res.json<any>();
 		})

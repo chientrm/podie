@@ -6,4 +6,3 @@ const supabase = createClient(config.url, config.key, {
 });
 
 export const letusknow = supabase.from<{ email: string }>('letusknow');
-export const responses = supabase.from<{ value: string }>('responses');
