@@ -15,7 +15,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 	} catch (error) {
 		await crashes.insert({
 			event: JSON.stringify(event),
-			error: error as string
+			error: typeof error
 		});
 		throw error;
 	}
