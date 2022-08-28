@@ -23,7 +23,7 @@ const f = (url: string, access_token: string) =>
 			Accept: 'application/vnd.github+json',
 			Authorization: `token ${access_token}`,
 			'User-Agent': strings.PODIE
-		}
+		},
 	}).then(check_ok);
 
 export const get_user = (access_token: string) =>
