@@ -13,8 +13,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		}
 		return resolve(event);
 	} catch (error) {
-		const e = error as Error;
-		const { message, stack } = e;
+		const { message, stack } = error as Error;
 		await crashes.insert({
 			event: JSON.stringify(event),
 			error: JSON.stringify({ message, stack })
