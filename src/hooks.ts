@@ -13,10 +13,11 @@ export const handle: Handle = async ({ event, resolve }) => {
 		}
 		return resolve(event);
 	} catch (error) {
+		const e = error as Error;
+		const { message, stack } = e;
 		await crashes.insert({
 			event: JSON.stringify(event),
-			/** @ts-ignore */
-			error: error.message
+			error: JSON.stringify({ message, stack })
 		});
 		throw error;
 	}
