@@ -1,6 +1,8 @@
 export default {
 	PODIE: 'Podie',
 	LOGIN: 'Login',
+	LOGIN_GITHUB: 'Login GitHub',
+	LOGIN_GCP: 'Login GCP',
 	LOGOUT: 'Logout',
 	LET_US_KNOW: 'Let us know',
 	EMAIL: 'Email',
@@ -24,5 +26,7 @@ export default {
 	OOPS: 'Oops. Something went wrong!',
 	CONNECT_GCP: 'Connect GCP',
 	REPOES: 'Repoes',
-	PROJECTS: 'Projects'
+	PROJECTS: 'Projects',
+	SELECT_PROJECT: 'Select project',
+	CONFIRM: 'Confirm'
 };

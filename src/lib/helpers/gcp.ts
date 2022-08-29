@@ -26,7 +26,11 @@ export const get_gcp_tokens = async ({
 	body.append('include_granted_scopes', 'true');
 	body.append('redirect_uri', redirect_uri);
 	const res = check_ok(await fetch(routes.GCP.TOKEN, { method: 'POST', body }));
-	return await res.json<{ access_token: string; expires_in: number }>();
+	return await res.json<{
+		access_token: string;
+		refresh_token: string;
+		expires_in: number;
+	}>();
 };
 
 const f = (url: string, access_token: string) =>
@@ -37,7 +41,23 @@ const f = (url: string, access_token: string) =>
 		}
 	}).then(check_ok);
 
+export const get_user = (access_token: string) =>
+	f(routes.GCP.USER_INFO, access_token).then((res) =>
+		res.json<{ name: string }>()
+	);
+
 export const list_projects = (access_token: string) =>
-	f(routes.GCP.PROJECT.LIST, access_token)
-		.then(check_ok)
-		.then((res) => res.json<{ projects: GCP.Project[] }>());
+	f(routes.GCP.PROJECT.LIST, access_token).then((res) =>
+		res.json<{ projects: { projectId: string; name: string }[] }>()
+	);
+
+export const get_project = ({
+	id,
+	access_token
+}: {
+	id: string;
+	access_token: string;
+}) =>
+	f(routes.GCP.PROJECT.GET(id), access_token).then((res) =>
+		res.json<{ name: string }>()
+	);

@@ -23,13 +23,13 @@ const f = (url: string, access_token: string) =>
 			Accept: 'application/vnd.github+json',
 			Authorization: `token ${access_token}`,
 			'User-Agent': strings.PODIE
-		},
+		}
 	}).then(check_ok);
 
 export const get_user = (access_token: string) =>
-	f(routes.GITHUB.USER, access_token)
-		.then((res) => res.json<any>())
-		.then((data) => ({ ...data, username: data.login }));
+	f(routes.GITHUB.USER, access_token).then((res) =>
+		res.json<{ login: string; html_url: string }>()
+	);
 
 export const list_repoes = (access_token: string) =>
 	f(routes.GITHUB.REPOS, access_token).then((res) =>

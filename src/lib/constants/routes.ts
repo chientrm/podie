@@ -53,8 +53,12 @@ export default {
 			return url.href;
 		},
 		TOKEN: 'https://oauth2.googleapis.com/token',
+		USER_INFO: 'https://www.googleapis.com/oauth2/v3/userinfo',
 		PROJECT: {
-			LIST: 'https://cloudresourcemanager.googleapis.com/v1/projects'
+			LIST: 'https://cloudresourcemanager.googleapis.com/v1/projects',
+			GET: (id: string) =>
+				`https://cloudresourcemanager.googleapis.com/v1/projects/${id}`
 		}
-	}
+	},
+	SELECT_PROJECT: '/select_project'
 };
