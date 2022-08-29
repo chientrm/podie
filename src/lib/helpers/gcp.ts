@@ -47,7 +47,7 @@ export const get_user = (access_token: string) =>
 	);
 
 export const list_projects = (access_token: string) =>
-	f(routes.GCP.PROJECT.LIST, access_token).then((res) =>
+	f(routes.GCP.PROJECTS.LIST, access_token).then((res) =>
 		res.json<{ projects: { projectId: string; name: string }[] }>()
 	);
 
@@ -58,6 +58,6 @@ export const get_project = ({
 	id: string;
 	access_token: string;
 }) =>
-	f(routes.GCP.PROJECT.GET(id), access_token).then((res) =>
-		res.json<{ name: string }>()
+	f(routes.GCP.PROJECT(id).GET, access_token).then((res) =>
+		res.json<{ projectId: string; name: string }>()
 	);
