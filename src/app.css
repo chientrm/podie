@@ -33,3 +33,9 @@ td {
 	border-collapse: collapse;
 	padding: 0.5em;
 }
+nav {
+	display: flex;
+	flex-direction: row;
+	align-items: baseline;
+	gap: 1em;
+}
