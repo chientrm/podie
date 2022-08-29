@@ -5,7 +5,8 @@ a:visited {
 	color: blue;
 }
 button,
-input[type='submit'] {
+input[type='submit'],
+select {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
