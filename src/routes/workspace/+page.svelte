@@ -1,11 +1,14 @@
 <script lang="ts">
+	import { invalidate } from '$app/navigation';
 	import routes from '$lib/constants/routes';
 	import strings from '$lib/constants/strings';
+	import Refresh from 'svelte-material-icons/Refresh.svelte';
 	import type { PageServerData } from './$types';
 	export let data: PageServerData;
 </script>
 
-<h2>{strings.WORKSPACES}</h2>
+<button on:click={() => invalidate()}>{strings.REFRESH} <Refresh /></button>
+
 <table>
 	<thead>
 		<td>{strings.NAME}</td>

@@ -26,11 +26,19 @@ export default {
 	OOPS: 'Oops. Something went wrong!',
 	CONNECT_GCP: 'Connect GCP',
 	REPOES: 'Repoes',
+	REPO: 'Repo',
 	PROJECTS: 'Projects',
 	SELECT_PROJECT: 'Select project',
 	CONFIRM: 'Confirm',
 	NAME: 'Name',
 	IP: 'Ip',
 	STATUS: 'Status',
-	DELETE: 'Delete'
+	DELETE: 'Delete',
+	CREATE: 'Create',
+	REGIONS: 'Regions',
+	REGION: 'Region',
+	ZONE: 'Zone',
+	MACHINE_TYPE: 'Machine type',
+	REFRESH: 'Refresh',
+	DISK_SIZE: 'Disk size (GB)'
 };

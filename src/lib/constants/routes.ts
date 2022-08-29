@@ -7,6 +7,11 @@ export default {
 			INSTANCE: (resourceId: string) => ({
 				DELETE: `/workspace/${zone}/${resourceId}/delete`
 			})
+		}),
+		REGION: (region: string) => ({
+			ZONE: (zone: string) => ({
+				CREATE: `/workspace/region/${region}/zone/${zone}/create`
+			})
 		})
 	},
 	LET_US_KNOW: '/letusknow',
@@ -71,10 +76,19 @@ export default {
 				AGGREGATE: `https://compute.googleapis.com/compute/v1/projects/${project}/aggregated/instances`
 			},
 			ZONE: (zone: string) => ({
+				INSTANCES: {
+					INSERT: `https://compute.googleapis.com/compute/v1/projects/${project}/zones/${zone}/instances`
+				},
 				INSTANCE: (resourceId: string) => ({
 					DELETE: `https://compute.googleapis.com/compute/v1/projects/${project}/zones/${zone}/instances/${resourceId}`
-				})
-			})
+				}),
+				MACHINE_TYPES: {
+					LIST: `https://compute.googleapis.com/compute/v1/projects/${project}/zones/${zone}/machineTypes`
+				}
+			}),
+			REGIONS: {
+				LIST: `https://compute.googleapis.com/compute/v1/projects/${project}/regions`
+			}
 		})
 	},
 	SELECT_PROJECT: '/select_project'

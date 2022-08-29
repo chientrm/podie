@@ -63,7 +63,7 @@ export const get_project = ({
 		res.json<{ projectId: string; name: string }>()
 	);
 
-const extract_zone = (zone: string) => zone.split('/zones/').pop();
+const extract_zone = (zone: string) => zone.split('/zones/').pop()!;
 
 export const list_workspaces = ({
 	id,
@@ -98,7 +98,7 @@ export const list_workspaces = ({
 				.filter((v) => v.instances)
 				.map((v) => v.instances)
 				.flat()
-				.map((w) => ({ ...w, zone: extract_zone(w.zone)! }))
+				.map((w) => ({ ...w, zone: extract_zone(w.zone) }))
 		);
 
 export const delete_instance = ({
@@ -117,3 +117,77 @@ export const delete_instance = ({
 		access_token,
 		'DELETE'
 	);
+
+export const list_regions = ({
+	project,
+	access_token
+}: {
+	project: string;
+	access_token: string;
+}) =>
+	f(routes.GCP.PROJECT(project).REGIONS.LIST, access_token)
+		.then((res) => res.json<{ items: { name: string; zones: string[] }[] }>())
+		.then((res) =>
+			res.items
+				.map((i) => ({ ...i, zones: i.zones.map(extract_zone) }))
+				.reduce(
+					(a, b) => ({ ...a, [b.name]: b.zones }),
+					{} as Record<string, string[]>
+				)
+		);
+
+export const list_machine_types = ({
+	project,
+	access_token,
+	zone
+}: {
+	project: string;
+	access_token: string;
+	zone: string;
+}) =>
+	f(routes.GCP.PROJECT(project).ZONE(zone).MACHINE_TYPES.LIST, access_token)
+		.then((res) =>
+			res.json<{ items: { name: string; description: string }[] }>()
+		)
+		.then((res) =>
+			res.items.map(({ name, description }) => ({ name, description }))
+		);
+
+const DISK = ({ zone, diskSize }: { zone: string; diskSize: number }) => ({
+	initializeParams: {
+		diskSizeGb: diskSize,
+		sourceImage: 'projects/cos-cloud/global/images/cos-stable-97-16919-103-28',
+		diskType: `zones/${zone}/diskTypes/pd-ssd`
+	},
+	autoDelete: true,
+	boot: true
+});
+
+export const create_instance = ({
+	project,
+	access_token,
+	zone,
+	machineType,
+	name,
+	diskSize
+}: {
+	project: string;
+	access_token: string;
+	zone: string;
+	machineType: string;
+	name: string;
+	diskSize: number;
+}) =>
+	fetch(routes.GCP.PROJECT(project).ZONE(zone).INSTANCES.INSERT, {
+		method: 'POST',
+		headers: {
+			Accept: 'application/json',
+			Authorization: `Bearer ${access_token}`
+		},
+		body: JSON.stringify({
+			name,
+			machineType: `zones/${zone}/machineTypes/${machineType}`,
+			disks: [DISK({ diskSize, zone })],
+			networkInterfaces: [{ accessConfigs: [{ networkTier: 'PREMIUM' }] }]
+		})
+	}).then(check_ok);
