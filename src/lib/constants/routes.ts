@@ -54,11 +54,15 @@ export default {
 		},
 		TOKEN: 'https://oauth2.googleapis.com/token',
 		USER_INFO: 'https://www.googleapis.com/oauth2/v3/userinfo',
-		PROJECT: {
-			LIST: 'https://cloudresourcemanager.googleapis.com/v1/projects',
-			GET: (id: string) =>
-				`https://cloudresourcemanager.googleapis.com/v1/projects/${id}`
-		}
+		PROJECTS: {
+			LIST: 'https://cloudresourcemanager.googleapis.com/v1/projects'
+		},
+		PROJECT: (id: string) => ({
+			GET: `https://cloudresourcemanager.googleapis.com/v1/projects/${id}`,
+			INSTANCE: {
+				LIST: `https://console.cloud.google.com/compute/instances?project=${id}`
+			}
+		})
 	},
 	SELECT_PROJECT: '/select_project'
 };

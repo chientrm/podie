@@ -87,7 +87,15 @@
 		{#if data.gcp_user}
 			<section>
 				{#if data.gcp_project}
-					<span>{data.gcp_project.name}</span>
+					<span>
+						<a
+							href={routes.GCP.PROJECT(data.gcp_project.projectId).INSTANCE
+								.LIST}
+							target="_blank"
+						>
+							{data.gcp_project.name}
+						</a>
+					</span>
 				{:else}
 					<a href={routes.SELECT_PROJECT}>{strings.SELECT_PROJECT}</a>
 				{/if}
