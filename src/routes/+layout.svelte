@@ -89,8 +89,7 @@
 				{#if data.gcp_project}
 					<span>
 						<a
-							href={routes.GCP.PROJECT(data.gcp_project.projectId).INSTANCE
-								.LIST}
+							href={routes.GCP.PROJECT(data.gcp_project.projectId).HOME}
 							target="_blank"
 						>
 							{data.gcp_project.name}
@@ -103,7 +102,7 @@
 			</section>
 		{/if}
 		{#if data.gh_user && data.gcp_user && data.gcp_project}
-			<Anchor href={routes.WORKSPACES}>{strings.WORKSPACES}</Anchor>
+			<Anchor href={routes.WORKSPACE.GET}>{strings.WORKSPACES}</Anchor>
 		{/if}
 	</div>
 </header>

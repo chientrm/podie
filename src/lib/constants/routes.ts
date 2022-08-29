@@ -1,7 +1,14 @@
 export default {
 	HOME: '/',
 	LOGIN: '/login',
-	WORKSPACES: '/workspaces',
+	WORKSPACE: {
+		GET: '/workspace',
+		ZONE: (zone: string) => ({
+			INSTANCE: (resourceId: string) => ({
+				DELETE: `/workspace/${zone}/${resourceId}/delete`
+			})
+		})
+	},
 	LET_US_KNOW: '/letusknow',
 	THANK: (email: string) => ({
 		GET: `/thank/${email}`
@@ -57,11 +64,17 @@ export default {
 		PROJECTS: {
 			LIST: 'https://cloudresourcemanager.googleapis.com/v1/projects'
 		},
-		PROJECT: (id: string) => ({
-			GET: `https://cloudresourcemanager.googleapis.com/v1/projects/${id}`,
-			INSTANCE: {
-				LIST: `https://console.cloud.google.com/compute/instances?project=${id}`
-			}
+		PROJECT: (project: string) => ({
+			GET: `https://cloudresourcemanager.googleapis.com/v1/projects/${project}`,
+			HOME: `https://console.cloud.google.com/compute/instances?project=${project}`,
+			INSTANCES: {
+				AGGREGATE: `https://compute.googleapis.com/compute/v1/projects/${project}/aggregated/instances`
+			},
+			ZONE: (zone: string) => ({
+				INSTANCE: (resourceId: string) => ({
+					DELETE: `https://compute.googleapis.com/compute/v1/projects/${project}/zones/${zone}/instances/${resourceId}`
+				})
+			})
 		})
 	},
 	SELECT_PROJECT: '/select_project'

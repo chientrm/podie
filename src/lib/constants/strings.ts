@@ -28,5 +28,9 @@ export default {
 	REPOES: 'Repoes',
 	PROJECTS: 'Projects',
 	SELECT_PROJECT: 'Select project',
-	CONFIRM: 'Confirm'
+	CONFIRM: 'Confirm',
+	NAME: 'Name',
+	IP: 'Ip',
+	STATUS: 'Status',
+	DELETE: 'Delete'
 };

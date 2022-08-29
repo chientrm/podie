@@ -20,5 +20,5 @@ export const POST: Action = async ({ request, setHeaders }) => {
 	const formData = await request.formData();
 	const id = formData.get('id') as string;
 	setHeaders(set_gcp_project_id(id));
-	throw redirect(302, routes.HOME);
+	throw redirect(302, routes.WORKSPACE.GET);
 };
