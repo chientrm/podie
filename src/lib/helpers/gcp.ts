@@ -33,8 +33,9 @@ export const get_gcp_tokens = async ({
 	}>();
 };
 
-const f = (url: string, access_token: string) =>
+const f = (url: string, access_token: string, method: string = 'GET') =>
 	fetch(url, {
+		method,
 		headers: {
 			Accept: 'application/json',
 			Authorization: `Bearer ${access_token}`
@@ -60,4 +61,59 @@ export const get_project = ({
 }) =>
 	f(routes.GCP.PROJECT(id).GET, access_token).then((res) =>
 		res.json<{ projectId: string; name: string }>()
+	);
+
+const extract_zone = (zone: string) => zone.split('/zones/').pop();
+
+export const list_workspaces = ({
+	id,
+	access_token
+}: {
+	id: string;
+	access_token: string;
+}) =>
+	f(routes.GCP.PROJECT(id).INSTANCES.AGGREGATE, access_token)
+		.then((res) =>
+			res.json<{
+				items: Record<
+					string,
+					{
+						instances: {
+							id: string;
+							name: string;
+							machineType: string;
+							zone: string;
+							selfLink: string;
+							status: string;
+							networkInterfaces: {
+								accessConfigs: { name: string; natIP: string }[];
+							}[];
+						}[];
+					}
+				>;
+			}>()
+		)
+		.then((res) =>
+			Object.values(res.items)
+				.filter((v) => v.instances)
+				.map((v) => v.instances)
+				.flat()
+				.map((w) => ({ ...w, zone: extract_zone(w.zone)! }))
+		);
+
+export const delete_instance = ({
+	project,
+	zone,
+	resourceId,
+	access_token
+}: {
+	project: string;
+	zone: string;
+	resourceId: string;
+	access_token: string;
+}) =>
+	f(
+		routes.GCP.PROJECT(project).ZONE(zone).INSTANCE(resourceId).DELETE,
+		access_token,
+		'DELETE'
 	);

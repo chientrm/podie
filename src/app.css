@@ -28,3 +28,8 @@ label {
 	align-items: center;
 	gap: 0.5em;
 }
+th,
+td {
+	border-collapse: collapse;
+	padding: 0.5em;
+}
