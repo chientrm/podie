@@ -34,11 +34,21 @@ export default {
 	IP: 'Ip',
 	STATUS: 'Status',
 	DELETE: 'Delete',
-	CREATE: 'Create',
+	CREATE_INSTANCE: 'Create instance',
 	REGIONS: 'Regions',
 	REGION: 'Region',
 	ZONE: 'Zone',
 	MACHINE_TYPE: 'Machine type',
 	REFRESH: 'Refresh',
-	DISK_SIZE: 'Disk size (GB)'
+	DISK_SIZE: 'Disk size (GB)',
+	SSH_KEYS: 'SSH keys',
+	STARTUP: 'Startup command',
+	BRANCH: 'Branch',
+	KEY: 'Key',
+	ADD: 'Add',
+	SSH_KEYS_LIMIT:
+		"Can't have more than 4 ssh_keys because of max cookie size 😥",
+	NEW_KEY: 'New key',
+	VALUE: 'Value',
+	INSTANCES: 'Instances'
 };

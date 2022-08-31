@@ -10,8 +10,37 @@ export default {
 		}),
 		REGION: (region: string) => ({
 			ZONE: (zone: string) => ({
-				CREATE: `/workspace/region/${region}/zone/${zone}/create`
+				CREATE: `/workspace/region/${region}/zone/${zone}/create`,
+				REPO: (repo: string) => ({
+					CREATE: `/workspace/region/${region}/zone/${zone}/repo/${repo}/create`
+				})
 			})
+		}),
+		INSTANCES: {
+			LIST: '/workspace/instance',
+			CREATE: {
+				GET: '/workspace/instance/create',
+				REPO: (repo: string) => ({
+					REGION: (region: string) => ({
+						ZONE: (zone: string) =>
+							`/workspace/instance/create/${repo}/${region}/${zone}`
+					})
+				})
+			},
+			DELETE: {
+				ZONE: (zone: string) => ({
+					RESOURCE_ID: (resourceId: string) => ({
+						DELETE: `/workspace/instance/delete/${zone}/${resourceId}`
+					})
+				})
+			}
+		},
+		SSH_KEYS: {
+			LIST: '/workspace/ssh_key',
+			ADD: '/workspace/ssh_key/add'
+		},
+		SSH_KEY: (name: string) => ({
+			DELETE: `/workspace/ssh_key/delete/${name}`
 		})
 	},
 	LET_US_KNOW: '/letusknow',
@@ -19,7 +48,7 @@ export default {
 		GET: `/thank/${email}`
 	}),
 	GITHUB: {
-		REPO: 'https://github.com/chientrm/podie',
+		PODIE_REPO: 'https://github.com/chientrm/podie',
 		AUTHORIZE: ({ client_id, scope }: { client_id: string; scope: string }) => {
 			const url = new URL('https://github.com/login/oauth/authorize');
 			url.searchParams.append('client_id', client_id);
@@ -42,7 +71,12 @@ export default {
 			return url.href;
 		},
 		USER: 'https://api.github.com/user',
-		REPOS: 'https://api.github.com/user/repos?per_page=100'
+		REPOS: 'https://api.github.com/user/repos?per_page=100',
+		REPO: (repo: string) => ({
+			BRANCHES: {
+				LIST: `https://api.github.com/repos/${repo}/branches`
+			}
+		})
 	},
 	GCP: {
 		REDIRECT: '/gcp',

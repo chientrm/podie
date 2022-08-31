@@ -1,14 +1,19 @@
 <script lang="ts">
-	import { page } from '$app/stores';
 	import patterns from '$lib/constants/patterns';
 	import strings from '$lib/constants/strings';
 	import type { PageServerData } from './$types';
 	export let data: PageServerData;
-	const { zone } = $page.params;
 </script>
 
 <form method="POST">
-	<input type="hidden" name="zone" value={zone} />
+	<label>
+		<span>{strings.BRANCH}</span>
+		<select name="branch">
+			{#each data.branches as branch}
+				<option value={branch.name}>{branch.name}</option>
+			{/each}
+		</select>
+	</label>
 	<label>
 		<span>{strings.NAME}</span>
 		<input
@@ -23,7 +28,7 @@
 		<span>{strings.DISK_SIZE}</span>
 		<input
 			type="number"
-			name="diskSize"
+			name="disk_size"
 			min="10"
 			value="10"
 			step="1"
@@ -31,16 +36,12 @@
 		/>
 	</label>
 	<label>
-		<span>{strings.REPO}</span>
-		<select name="repo">
-			{#each data.repoes as repo}
-				<option value={repo.html_url}>{repo.full_name}</option>
-			{/each}
-		</select>
+		<span>{strings.STARTUP}</span>
+		<input type="text" name="startup" />
 	</label>
 	<label>
 		<span>{strings.MACHINE_TYPE}</span>
-		<select name="machineType">
+		<select name="machine_type" required>
 			{#each data.machine_types as machine_type}
 				<option value={machine_type.name}>
 					{machine_type.name} ({machine_type.description})
@@ -48,7 +49,7 @@
 			{/each}
 		</select>
 	</label>
-	<input type="submit" value={strings.CREATE} />
+	<input type="submit" value={strings.CREATE_INSTANCE} />
 </form>
 
 <style>

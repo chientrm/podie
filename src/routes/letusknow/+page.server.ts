@@ -6,9 +6,6 @@ import type { Action } from './$types';
 export const POST: Action = async ({ request }) => {
 	const formData = await request.formData();
 	const email = formData.get('email') as string;
-	const { error } = await letusknow.upsert({ email });
-	if (error) {
-		throw error;
-	}
+	await letusknow().upsert({ email });
 	throw redirect(302, routes.THANK(email).GET);
 };

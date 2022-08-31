@@ -1,13 +1,14 @@
 import routes from '$lib/constants/routes';
-import { login_gh } from '$lib/helpers/cookie';
-import { get_access_token } from '$lib/helpers/github';
-import type { RequestHandler } from '@sveltejs/kit';
+import { set_gh } from '$lib/helpers/cookie';
+import { encrypt } from '$lib/helpers/encryption';
+import { get_access_token, get_user } from '$lib/helpers/github';
+import { redirect, type RequestHandler } from '@sveltejs/kit';
 
-export const GET: RequestHandler = async ({ url }) => {
-	const code = url.searchParams.get('code')!;
-	const access_token = await get_access_token(code);
-	return new Response(undefined, {
-		status: 302,
-		headers: { Location: routes.WORKSPACE.GET, ...login_gh(access_token) }
-	});
+export const GET: RequestHandler = async ({ url, setHeaders }) => {
+	const code = url.searchParams.get('code')!,
+		access_token = await get_access_token(code),
+		user = await get_user(access_token),
+		gh = await encrypt({ access_token, user });
+	setHeaders(set_gh(gh));
+	throw redirect(302, routes.WORKSPACE.GET);
 };

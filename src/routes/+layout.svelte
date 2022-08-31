@@ -18,15 +18,15 @@
 	import type { LayoutServerData } from './$types';
 
 	export let data: LayoutServerData;
-	const gh_scope = ['repo'].join(' ');
-	const gcp_scope = [
-		'https://www.googleapis.com/auth/userinfo.email',
-		'https://www.googleapis.com/auth/userinfo.profile',
-		'https://www.googleapis.com/auth/cloud-platform',
-		'https://www.googleapis.com/auth/compute'
-	].join(' ');
 
-	const gsiteVerification = 'gG8WXVPtqVVAJlnJb5v0LlC0-HBSCVSWsVqa7KHwTPA';
+	const gh_scope = ['repo'].join(' '),
+		gcp_scope = [
+			'https://www.googleapis.com/auth/userinfo.email',
+			'https://www.googleapis.com/auth/userinfo.profile',
+			'https://www.googleapis.com/auth/cloud-platform',
+			'https://www.googleapis.com/auth/compute'
+		].join(' '),
+		gsiteVerification = 'gG8WXVPtqVVAJlnJb5v0LlC0-HBSCVSWsVqa7KHwTPA';
 </script>
 
 <svelte:head>
@@ -46,10 +46,10 @@
 </svelte:head>
 
 <header>
-	<h2><Anchor href={routes.HOME}>{strings.PODIE}</Anchor></h2>
+	<Anchor href={routes.HOME}><h2>{strings.PODIE}</h2></Anchor>
 	<div>
-		<a href={routes.GITHUB.REPO} target="_blank">{strings.GITHUB}</a>
-		<section>
+		<a href={routes.GITHUB.PODIE_REPO} target="_blank">{strings.GITHUB}</a>
+		<p>
 			{#if data.gh_user}
 				<span>
 					<a href={data.gh_user.html_url} target="_blank">
@@ -67,8 +67,8 @@
 				</a>
 			{/if}
 			<GithubCircle />
-		</section>
-		<section>
+		</p>
+		<p>
 			{#if data.gcp_user}
 				<span>{data.gcp_user.name}</span>
 			{:else}
@@ -83,26 +83,28 @@
 				</a>
 			{/if}
 			<Google />
-		</section>
+		</p>
 		{#if data.gcp_user}
-			<section>
+			<p>
 				{#if data.gcp_project}
 					<span>
 						<a
-							href={routes.GCP.PROJECT(data.gcp_project.projectId).HOME}
+							href={routes.GCP.PROJECT(data.gcp_project.id).HOME}
 							target="_blank"
 						>
-							{data.gcp_project.name}
+							{data.gcp_project.id}
 						</a>
 					</span>
 				{:else}
 					<a href={routes.SELECT_PROJECT}>{strings.SELECT_PROJECT}</a>
 				{/if}
 				<GoogleCloud />
-			</section>
+			</p>
 		{/if}
 		{#if data.gh_user && data.gcp_user && data.gcp_project}
-			<Anchor href={routes.WORKSPACE.GET}>{strings.WORKSPACES}</Anchor>
+			<Anchor href={routes.WORKSPACE.GET} startsWith={true}>
+				{strings.WORKSPACES}
+			</Anchor>
 		{/if}
 	</div>
 </header>
@@ -125,13 +127,5 @@
 		display: flex;
 		align-items: center;
 		gap: 1em;
-	}
-	section {
-		display: flex;
-		flex-direction: row;
-		align-items: center;
-		border: 1px solid black;
-		padding: 0.5em;
-		gap: 0.5em;
 	}
 </style>
