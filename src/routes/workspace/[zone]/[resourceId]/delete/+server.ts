@@ -1,13 +1,10 @@
 import routes from '$lib/constants/routes';
-import {
-	parse_gcp_access_token,
-	parse_gcp_project_id
-} from '$lib/helpers/cookie';
+import { parse_gcp_access_token, parse_gcp_pid } from '$lib/helpers/cookie';
 import { delete_instance } from '$lib/helpers/gcp';
 import type { RequestHandler } from '@sveltejs/kit';
 
 export const GET: RequestHandler = async ({ request, params }) => {
-	const project = parse_gcp_project_id(request)!;
+	const project = parse_gcp_pid(request)!;
 	const access_token = parse_gcp_access_token(request)!;
 	const zone = params.zone!;
 	const resourceId = params.resourceId!;

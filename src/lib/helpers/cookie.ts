@@ -1,54 +1,39 @@
 import { parse, serialize } from 'cookie';
 
-const GH_ACCESS_TOKEN = 'gh_access_token';
-const GCP_ACCESS_TOKEN = 'gcp_access_token';
-const GCP_PROJECT_ID = 'gcp_project_id';
+const GH = 'gh',
+	GCP = 'gcp',
+	GCP_PID = 'gcp_pid',
+	set_cookie = ({
+		name,
+		value,
+		maxAge
+	}: {
+		name: string;
+		value: string;
+		maxAge?: number;
+	}) => ({
+		'Set-Cookie': serialize(name, value, {
+			path: '/',
+			httpOnly: true,
+			sameSite: 'strict',
+			secure: true,
+			maxAge
+		})
+	}),
+	parse_cookie = ({
+		request,
+		name
+	}: {
+		request: Request;
+		name: string;
+	}): string | undefined => parse(request.headers.get('cookie') || '')[name],
+	parse_gh = (request: Request) => parse_cookie({ request, name: GH }),
+	set_gh = (value: string) => set_cookie({ name: GH, value }),
+	parse_gcp = (request: Request) => parse_cookie({ request, name: GCP }),
+	set_gcp = ({ value, maxAge }: { value: string; maxAge: number }) =>
+		set_cookie({ name: GCP, value, maxAge }),
+	parse_gcp_pid = (request: Request) =>
+		parse_cookie({ request, name: GCP_PID }),
+	set_gcp_pid = (id: string) => set_cookie({ name: GCP_PID, value: id });
 
-const set_cookie = ({
-	name,
-	value,
-	expires_in
-}: {
-	name: string;
-	value: string;
-	expires_in?: number;
-}) => ({
-	'Set-Cookie': serialize(name, value, {
-		path: '/',
-		httpOnly: true,
-		sameSite: 'strict',
-		secure: true,
-		maxAge: expires_in
-	})
-});
-
-const parse_cookie = ({
-	request,
-	name
-}: {
-	request: Request;
-	name: string;
-}): string | undefined => parse(request.headers.get('cookie') || '')[name];
-
-export const parse_gh_access_token = (request: Request) =>
-	parse_cookie({ request, name: GH_ACCESS_TOKEN });
-
-export const parse_gcp_access_token = (request: Request) =>
-	parse_cookie({ request, name: GCP_ACCESS_TOKEN });
-
-export const parse_gcp_project_id = (request: Request) =>
-	parse_cookie({ request, name: GCP_PROJECT_ID });
-
-export const login_gh = (access_token: string) =>
-	set_cookie({ name: GH_ACCESS_TOKEN, value: access_token });
-
-export const login_gcp = ({
-	access_token,
-	expires_in
-}: {
-	access_token: string;
-	expires_in: number;
-}) => set_cookie({ name: GCP_ACCESS_TOKEN, value: access_token, expires_in });
-
-export const set_gcp_project_id = (id: string) =>
-	set_cookie({ name: GCP_PROJECT_ID, value: id });
+export { parse_gh, set_gh, parse_gcp, set_gcp, parse_gcp_pid, set_gcp_pid };

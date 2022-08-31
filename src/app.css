@@ -5,15 +5,15 @@ a:visited {
 	color: blue;
 }
 button,
-input[type='submit'],
-select {
+input[type='submit'] {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
-	padding: 1em;
+	padding: 0.5em;
 	gap: 0.5em;
 }
-input {
+input,
+select {
 	padding: 0.5em;
 }
 form {
@@ -38,4 +38,12 @@ nav {
 	flex-direction: row;
 	align-items: baseline;
 	gap: 1em;
+}
+p {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	border: 1px solid black;
+	padding: 0.5em;
+	gap: 0.5em;
 }

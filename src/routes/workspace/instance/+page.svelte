@@ -17,17 +17,16 @@
 		<td>{strings.DELETE}</td>
 	</thead>
 	<tbody>
-		{#each data.workspaces as workspace}
+		{#each data.instances as instance}
 			<tr>
-				<td> {workspace.name} </td>
-				<td>{workspace.networkInterfaces[0]?.accessConfigs[0]?.natIP}</td>
-				<td>{workspace.status}</td>
+				<td> {instance.name} </td>
+				<td>{instance.networkInterfaces[0]?.accessConfigs[0]?.natIP}</td>
+				<td>{instance.status}</td>
 				<td>
-					{#if workspace.status === 'RUNNING'}
+					{#if instance.status === 'RUNNING'}
 						<a
-							href={routes.WORKSPACE.ZONE(workspace.zone).INSTANCE(
-								workspace.name
-							).DELETE}
+							href={routes.WORKSPACE.ZONE(instance.zone).INSTANCE(instance.name)
+								.DELETE}
 						>
 							{strings.DELETE}
 						</a>

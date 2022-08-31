@@ -4,11 +4,18 @@
 	import strings from '$lib/constants/strings';
 	import type { PageServerData } from './$types';
 	export let data: PageServerData;
-	const { zone } = $page.params;
 </script>
 
 <form method="POST">
-	<input type="hidden" name="zone" value={zone} />
+	<input type="hidden" name="zone" value={$page.params.zone} />
+	<label>
+		<span>{strings.BRANCH}</span>
+		<select name="branch">
+			{#each data.branches as branch}
+				<option value={branch.name}>{branch.name}</option>
+			{/each}
+		</select>
+	</label>
 	<label>
 		<span>{strings.NAME}</span>
 		<input
@@ -31,12 +38,12 @@
 		/>
 	</label>
 	<label>
-		<span>{strings.REPO}</span>
-		<select name="repo">
-			{#each data.repoes as repo}
-				<option value={repo.html_url}>{repo.full_name}</option>
-			{/each}
-		</select>
+		<span>{strings.SSH_KEY}</span>
+		<input type="text" name="sshKey" required />
+	</label>
+	<label>
+		<span>{strings.STARTUP}</span>
+		<input type="text" name="startup" required />
 	</label>
 	<label>
 		<span>{strings.MACHINE_TYPE}</span>
@@ -48,7 +55,7 @@
 			{/each}
 		</select>
 	</label>
-	<input type="submit" value={strings.CREATE} />
+	<input type="submit" value={strings.CREATE_INSTANCE} />
 </form>
 
 <style>
