@@ -19,14 +19,15 @@ const get_gcp_tokens = async ({
 		body.append('grant_type', 'authorization_code');
 		body.append('include_granted_scopes', 'true');
 		body.append('redirect_uri', redirect_uri);
-		const res = check_ok(
-			await fetch(routes.GCP.TOKEN, { method: 'POST', body })
-		);
-		return await res.json<{
-			access_token: string;
-			refresh_token: string;
-			expires_in: number;
-		}>();
+		return await fetch(routes.GCP.TOKEN, { method: 'POST', body })
+			.then(check_ok)
+			.then((res) =>
+				res.json<{
+					access_token: string;
+					refresh_token: string;
+					expires_in: number;
+				}>()
+			);
 	},
 	f = (url: string, access_token: string, method: string = 'GET') =>
 		fetch(url, {
