@@ -5,7 +5,7 @@
 </script>
 
 <h4>
-	<Anchor href={routes.WORKSPACE.INSTANCES.CREATE}>
+	<Anchor href={routes.WORKSPACE.INSTANCES.CREATE.GET} startsWith={true}>
 		{strings.CREATE_INSTANCE}
 	</Anchor>
 </h4>

@@ -145,30 +145,34 @@ const get_gcp_tokens = async ({
 	}),
 	create_instance = ({
 		project,
-		access_token,
+		gcp_access_token,
+		gh_access_token,
 		zone,
 		machineType,
 		name,
 		diskSize,
 		startup,
 		repo,
-		sshKey
+		sshKeys,
+		branch
 	}: {
 		project: string;
-		access_token: string;
+		gcp_access_token: string;
+		gh_access_token: string;
 		zone: string;
 		machineType: string;
 		name: string;
 		diskSize: number;
 		startup: string;
 		repo: string;
-		sshKey: string;
+		branch: string;
+		sshKeys: string[];
 	}) =>
 		fetch(routes.GCP.PROJECT(project).ZONE(zone).INSTANCES.INSERT, {
 			method: 'POST',
 			headers: {
 				Accept: 'application/json',
-				Authorization: `Bearer ${access_token}`
+				Authorization: `Bearer ${gcp_access_token}`
 			},
 			body: JSON.stringify({
 				name,
@@ -180,14 +184,14 @@ const get_gcp_tokens = async ({
 						{
 							key: 'startup-script',
 							value: [
-								`git clone https://${access_token}@github.com/${repo} /home/podie/workspace`,
-								'cd /home/podie/workspace'
-								// `bash ${startup}`
+								`git clone --branch ${branch} https://${gh_access_token}@github.com/${repo} /home/podie/workspace`,
+								'cd /home/podie/workspace',
+								startup
 							].join('\n')
 						},
 						{
 							key: 'ssh-keys',
-							value: `podie:${sshKey}`
+							value: `podie:${sshKeys.join('\n')}`
 						}
 					]
 				}

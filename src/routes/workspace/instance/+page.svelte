@@ -25,8 +25,9 @@
 				<td>
 					{#if instance.status === 'RUNNING'}
 						<a
-							href={routes.WORKSPACE.ZONE(instance.zone).INSTANCE(instance.name)
-								.DELETE}
+							href={routes.WORKSPACE.INSTANCES.DELETE.ZONE(
+								instance.zone
+							).RESOURCE_ID(instance.name).DELETE}
 						>
 							{strings.DELETE}
 						</a>

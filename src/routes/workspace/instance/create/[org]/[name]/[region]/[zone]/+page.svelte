@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { page } from '$app/stores';
 	import patterns from '$lib/constants/patterns';
 	import strings from '$lib/constants/strings';
 	import type { PageServerData } from './$types';
@@ -7,7 +6,6 @@
 </script>
 
 <form method="POST">
-	<input type="hidden" name="zone" value={$page.params.zone} />
 	<label>
 		<span>{strings.BRANCH}</span>
 		<select name="branch">
@@ -30,7 +28,7 @@
 		<span>{strings.DISK_SIZE}</span>
 		<input
 			type="number"
-			name="diskSize"
+			name="disk_size"
 			min="10"
 			value="10"
 			step="1"
@@ -38,16 +36,12 @@
 		/>
 	</label>
 	<label>
-		<span>{strings.SSH_KEY}</span>
-		<input type="text" name="sshKey" required />
-	</label>
-	<label>
 		<span>{strings.STARTUP}</span>
 		<input type="text" name="startup" required />
 	</label>
 	<label>
 		<span>{strings.MACHINE_TYPE}</span>
-		<select name="machineType">
+		<select name="machine_type" required>
 			{#each data.machine_types as machine_type}
 				<option value={machine_type.name}>
 					{machine_type.name} ({machine_type.description})

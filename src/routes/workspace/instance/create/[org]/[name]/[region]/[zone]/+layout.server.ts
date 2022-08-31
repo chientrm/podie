@@ -1,6 +1,7 @@
 import type { LayoutServerLoad } from './$types';
 
-export const load: LayoutServerLoad = async ({ parent }) => {
+export const load: LayoutServerLoad = async ({ parent, params }) => {
 	const { repoes, regions } = await parent();
-	console.log({ repoes, regions });
+	const { org, name, region, zone } = params;
+	return { repoes, regions, org, name, region, zone };
 };

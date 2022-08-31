@@ -18,7 +18,22 @@ export default {
 		}),
 		INSTANCES: {
 			LIST: '/workspace/instance',
-			CREATE: '/workspace/instance/create'
+			CREATE: {
+				GET: '/workspace/instance/create',
+				REPO: (repo: string) => ({
+					REGION: (region: string) => ({
+						ZONE: (zone: string) =>
+							`/workspace/instance/create/${repo}/${region}/${zone}`
+					})
+				})
+			},
+			DELETE: {
+				ZONE: (zone: string) => ({
+					RESOURCE_ID: (resourceId: string) => ({
+						DELETE: `/workspace/instance/delete/${zone}/${resourceId}`
+					})
+				})
+			}
 		},
 		SSH_KEYS: {
 			LIST: '/workspace/ssh_key',
