@@ -13,7 +13,7 @@ export default {
 	UNDER_CONSTRUCTION: '...under contruction...',
 	TITLE: 'Remote dev | Podie',
 	DESCRIPTION:
-		"It's a bit like Gitpod.io and Codespace. You pick repo, choose machine type, region and KABOOM! 👍.",
+		"It's a bit like Codespace but run on your own GCP, like Gitpod but don't need to setup 👍.",
 	KEYWORDS: [
 		'Remote',
 		'Development',
