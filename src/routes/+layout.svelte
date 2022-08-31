@@ -86,10 +86,13 @@
 		</p>
 		{#if data.gcp_user}
 			<p>
-				{#if data.gcp_pid}
+				{#if data.gcp_project}
 					<span>
-						<a href={routes.GCP.PROJECT(data.gcp_pid).HOME} target="_blank">
-							{data.gcp_pid}
+						<a
+							href={routes.GCP.PROJECT(data.gcp_project.id).HOME}
+							target="_blank"
+						>
+							{data.gcp_project.id}
 						</a>
 					</span>
 				{:else}
@@ -98,7 +101,7 @@
 				<GoogleCloud />
 			</p>
 		{/if}
-		{#if data.gh_user && data.gcp_user && data.gcp_pid}
+		{#if data.gh_user && data.gcp_user && data.gcp_project}
 			<Anchor href={routes.WORKSPACE.GET} startsWith={true}>
 				{strings.WORKSPACES}
 			</Anchor>

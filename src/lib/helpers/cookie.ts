@@ -2,7 +2,7 @@ import { parse, serialize } from 'cookie';
 
 const GH = 'gh',
 	GCP = 'gcp',
-	GCP_PID = 'gcp_pid',
+	GCP_PROJECT = 'gcp_proj',
 	set_cookie = ({
 		name,
 		value,
@@ -32,8 +32,16 @@ const GH = 'gh',
 	parse_gcp = (request: Request) => parse_cookie({ request, name: GCP }),
 	set_gcp = ({ value, maxAge }: { value: string; maxAge: number }) =>
 		set_cookie({ name: GCP, value, maxAge }),
-	parse_gcp_pid = (request: Request) =>
-		parse_cookie({ request, name: GCP_PID }),
-	set_gcp_pid = (id: string) => set_cookie({ name: GCP_PID, value: id });
+	parse_gcp_project = (request: Request) =>
+		parse_cookie({ request, name: GCP_PROJECT }),
+	set_gcp_project = (id: string) =>
+		set_cookie({ name: GCP_PROJECT, value: id });
 
-export { parse_gh, set_gh, parse_gcp, set_gcp, parse_gcp_pid, set_gcp_pid };
+export {
+	parse_gh,
+	set_gh,
+	parse_gcp,
+	set_gcp,
+	parse_gcp_project,
+	set_gcp_project
+};

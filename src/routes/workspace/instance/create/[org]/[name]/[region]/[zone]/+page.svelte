@@ -37,7 +37,7 @@
 	</label>
 	<label>
 		<span>{strings.STARTUP}</span>
-		<input type="text" name="startup" required />
+		<input type="text" name="startup" />
 	</label>
 	<label>
 		<span>{strings.MACHINE_TYPE}</span>

@@ -1,8 +1,8 @@
 import { client_id, client_secret, redirect_uri } from '$lib/configs/gcp.json';
 import routes from '$lib/constants/routes';
 import { set_gcp } from '$lib/helpers/cookie';
+import { encrypt } from '$lib/helpers/encryption';
 import { get_gcp_tokens, get_user } from '$lib/helpers/gcp';
-import { encrypt } from '$lib/utils';
 import { redirect, type RequestHandler } from '@sveltejs/kit';
 
 export const GET: RequestHandler = async ({ url, setHeaders }) => {

@@ -7,7 +7,7 @@ import type { Action, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ params, locals }) => {
 	const { org, name, zone } = params,
-		project = locals.gcp_pid!,
+		project = locals.gcp_project!.id,
 		for_branches = list_branches({
 			access_token: locals.gh!.access_token,
 			repo: `${org}/${name}`
@@ -38,7 +38,7 @@ export const POST: Action = async ({ request, params, locals }) => {
 			.eq('id', locals.gh!.user.login)
 			.then((res) => res.data!.map((i) => i.value));
 	await create_instance({
-		project: locals.gcp_pid!,
+		project: locals.gcp_project!.id,
 		gh_access_token: locals.gh!.access_token,
 		gcp_access_token: locals.gcp!.access_token,
 		zone,
