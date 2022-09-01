@@ -50,5 +50,7 @@ export default {
 		"Can't have more than 4 ssh_keys because of max cookie size 😥",
 	NEW_KEY: 'New key',
 	VALUE: 'Value',
-	INSTANCES: 'Instances'
+	INSTANCES: 'Instances',
+	PRIVACY_POLICY: 'Privacy Policy',
+	TERMS_AND_CONDITIONS: 'Terms and Conditions'
 };
