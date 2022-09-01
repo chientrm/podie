@@ -46,8 +46,6 @@ export default {
 	BRANCH: 'Branch',
 	KEY: 'Key',
 	ADD: 'Add',
-	SSH_KEYS_LIMIT:
-		"Can't have more than 4 ssh_keys because of max cookie size 😥",
 	NEW_KEY: 'New key',
 	VALUE: 'Value',
 	INSTANCES: 'Instances',

@@ -1,7 +1,6 @@
 import routes from '$lib/constants/routes';
 import { create_instance, list_machine_types } from '$lib/helpers/gcp';
 import { list_branches } from '$lib/helpers/github';
-import { ssh_keys } from '$lib/helpers/supabase';
 import { redirect } from '@sveltejs/kit';
 import type { Action, PageServerLoad } from './$types';
 
@@ -33,10 +32,9 @@ export const POST: Action = async ({ request, params, locals }) => {
 		machineType = formData.get('machine_type')! as string,
 		{ org, name: repoName, zone } = params,
 		repo = `${org}/${repoName}`,
-		sshKeys = await ssh_keys()
-			.select('value')
-			.eq('id', locals.gh!.user.login)
-			.then((res) => res.data!.map((i) => i.value));
+		key = locals.gh!.user.login,
+		keys = await locals.SSH_KEYS.get<Podie.SshKeys>(key, 'json'),
+		sshKeys = Object.values(keys);
 	await create_instance({
 		project: locals.gcp_project!.id,
 		gh_access_token: locals.gh!.access_token,
