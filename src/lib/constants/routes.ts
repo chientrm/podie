@@ -32,7 +32,8 @@ export default {
 					RESOURCE_ID: (resourceId: string) =>
 						`/workspace/instance/delete/${zone}/${resourceId}`
 				})
-			}
+			},
+			START: (name: string) => `/workspace/instance/start/${name}`
 		},
 		SSH_KEYS: {
 			LIST: '/workspace/ssh_key',
@@ -72,6 +73,7 @@ export default {
 		USER: 'https://api.github.com/user',
 		REPOS: 'https://api.github.com/user/repos?per_page=100',
 		REPO: (repo: string) => ({
+			VIEW: `https://github.com/${repo}`,
 			BRANCHES: {
 				LIST: `https://api.github.com/repos/${repo}/branches`
 			}

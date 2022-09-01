@@ -32,7 +32,7 @@ export default {
 	CONFIRM: 'Confirm',
 	NAME: 'Name',
 	IP: 'Ip',
-	STATUS: 'Status',
+	ADDRESS: 'Address',
 	DELETE: 'Delete',
 	CREATE_INSTANCE: 'Create instance',
 	REGIONS: 'Regions',
@@ -53,5 +53,8 @@ export default {
 	TERMS_AND_CONDITIONS: 'Terms and Conditions',
 	TERMINATE: 'Terminate',
 	MACHINES: 'Machines',
-	STOPPED: 'Stopped'
+	STOPPED: 'Stopped',
+	ACTION: 'Action',
+	START: 'Start',
+	REFRESHING: 'Refreshing'
 };
