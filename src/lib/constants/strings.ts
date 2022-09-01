@@ -53,7 +53,7 @@ export default {
 	TERMS_AND_CONDITIONS: 'Terms and Conditions',
 	TERMINATE: 'Terminate',
 	MACHINES: 'Machines',
-	STOPPED: 'Stopped',
+	TERMINATED: 'Terminated',
 	ACTION: 'Action',
 	START: 'Start',
 	REFRESHING: 'Refreshing'

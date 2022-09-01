@@ -54,7 +54,7 @@
 								{data.gcp_instances[name].status}
 							{/if}
 						{:else}
-							{strings.STOPPED}
+							{strings.TERMINATED}
 						{/if}
 					</td>
 					<td>
