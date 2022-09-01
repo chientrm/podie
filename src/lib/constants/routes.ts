@@ -27,13 +27,14 @@ export default {
 					})
 				})
 			},
-			DELETE: {
+			TEMRINATE: {
 				ZONE: (zone: string) => ({
 					RESOURCE_ID: (resourceId: string) =>
-						`/workspace/instance/delete/${zone}/${resourceId}`
+						`/workspace/instance/terminate/${zone}/${resourceId}`
 				})
 			},
-			START: (name: string) => `/workspace/instance/start/${name}`
+			START: (name: string) => `/workspace/instance/start/${name}`,
+			DELETE: (name: string) => `/workspace/instance/delete/${name}`
 		},
 		SSH_KEYS: {
 			LIST: '/workspace/ssh_key',

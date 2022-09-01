@@ -61,7 +61,7 @@
 						{#if data.gcp_instances[name]}
 							{#if data.gcp_instances[name].status === 'RUNNING'}
 								<a
-									href={routes.WORKSPACE.INSTANCES.DELETE.ZONE(
+									href={routes.WORKSPACE.INSTANCES.TEMRINATE.ZONE(
 										data.gcp_instances[name].zone
 									).RESOURCE_ID(name)}
 								>
@@ -71,6 +71,9 @@
 						{:else}
 							<a href={routes.WORKSPACE.INSTANCES.START(name)}>
 								{strings.START}
+							</a>
+							<a href={routes.WORKSPACE.INSTANCES.DELETE(name)}>
+								{strings.DELETE}
 							</a>
 						{/if}
 					</td>
