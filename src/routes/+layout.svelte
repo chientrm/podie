@@ -98,7 +98,9 @@
 								</a>
 							</span>
 						{:else}
-							<a href={routes.SELECT_PROJECT}>{strings.SELECT_PROJECT}</a>
+							<Anchor href={routes.SELECT_PROJECT}>
+								{strings.SELECT_PROJECT}
+							</Anchor>
 						{/if}
 						<GoogleCloud />
 					</p>

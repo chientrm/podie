@@ -5,7 +5,7 @@
 	export let data: PageServerData;
 </script>
 
-{#each data.keys as { name, value }}
+{#each Object.entries(data.keys) as [name, value]}
 	<p>
 		<span>{name}</span>
 		<span>{value}</span>

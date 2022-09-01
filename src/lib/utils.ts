@@ -1,6 +1,8 @@
-const check_ok = (res: Response) => {
+const check_ok = async (res: Response) => {
 	if (!res.ok) {
-		throw res;
+		const { status, statusText } = res,
+			text = await res.text();
+		throw new Error(JSON.stringify({ status, statusText, text }));
 	}
 	return res;
 };
