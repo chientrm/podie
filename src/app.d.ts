@@ -6,10 +6,11 @@ declare namespace App {
 		gcp: undefined | { access_token: string; user: { name: string } };
 		gcp_project: undefined | { id: string };
 		SSH_KEYS: KVNamespace;
+		INSTANCES: KVNamespace;
 	}
 	// interface PageData {}
 	interface Platform {
-		env: { SSH_KEYS: KVNamespace };
+		env: { SSH_KEYS: KVNamespace; INSTANCES: KVNamespace };
 	}
 	// interface PrivateEnv {}
 	// interface PublicEnv {}
@@ -17,4 +18,13 @@ declare namespace App {
 
 declare namespace Podie {
 	type SshKeys = Record<string, string>;
+	interface Instance {
+		repo: string;
+		branch: string;
+		zone: string;
+		diskSize: number;
+		startup: string;
+		machineType: string;
+	}
+	type Instances = Record<string, Instance>;
 }

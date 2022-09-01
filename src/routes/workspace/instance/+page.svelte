@@ -9,28 +9,38 @@
 
 <button on:click={() => invalidate()}>{strings.REFRESH} <Refresh /></button>
 
+<h2>{strings.INSTANCES}</h2>
 <table>
 	<thead>
 		<td>{strings.NAME}</td>
-		<td>{strings.IP}</td>
+		<td>{strings.REPO}</td>
+		<td>{strings.ZONE}</td>
+		<td>{strings.MACHINE_TYPE}</td>
 		<td>{strings.STATUS}</td>
-		<td>{strings.DELETE}</td>
 	</thead>
 	<tbody>
-		{#each data.instances as instance}
+		{#each Object.entries(data.podie_instances) as [name, instance]}
 			<tr>
-				<td> {instance.name} </td>
-				<td>{instance.networkInterfaces[0]?.accessConfigs[0]?.natIP}</td>
-				<td>{instance.status}</td>
+				<td>{name}</td>
+				<td>{instance.repo}</td>
+				<td>{instance.zone}</td>
+				<td>{instance.machineType}</td>
 				<td>
-					{#if instance.status === 'RUNNING'}
-						<a
-							href={routes.WORKSPACE.INSTANCES.DELETE.ZONE(
-								instance.zone
-							).RESOURCE_ID(instance.name).DELETE}
-						>
-							{strings.DELETE}
-						</a>
+					{#if data.gcp_instances[name]}
+						{#if data.gcp_instances[name].status === 'RUNNING'}
+							{data.gcp_instances[name].natIP}
+							<a
+								href={routes.WORKSPACE.INSTANCES.DELETE.ZONE(
+									data.gcp_instances[name].zone
+								).RESOURCE_ID(name)}
+							>
+								{strings.TERMINATE}
+							</a>
+						{:else}
+							{data.gcp_instances[name].status}
+						{/if}
+					{:else}
+						{strings.STOPPED}
 					{/if}
 				</td>
 			</tr>

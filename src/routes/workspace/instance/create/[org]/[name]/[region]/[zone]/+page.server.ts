@@ -24,29 +24,44 @@ export const load: PageServerLoad = async ({ params, locals }) => {
 };
 
 export const POST: Action = async ({ request, params, locals }) => {
-	const formData = await request.formData(),
-		branch = formData.get('branch')! as string,
-		name = formData.get('name')! as string,
-		diskSize = parseInt(formData.get('disk_size')! as string),
-		startup = formData.get('startup')! as string,
-		machineType = formData.get('machine_type')! as string,
+	const for_formData = request.formData().then((formData) => ({
+			branch: formData.get('branch')! as string,
+			name: formData.get('name')! as string,
+			diskSize: parseInt(formData.get('disk_size')! as string),
+			startup: formData.get('startup')! as string,
+			machineType: formData.get('machine_type')! as string
+		})),
 		{ org, name: repoName, zone } = params,
 		repo = `${org}/${repoName}`,
 		key = locals.gh!.user.login,
-		keys = await locals.SSH_KEYS.get<Podie.SshKeys>(key, 'json'),
-		sshKeys = Object.values(keys);
-	await create_instance({
-		project: locals.gcp_project!.id,
-		gh_access_token: locals.gh!.access_token,
-		gcp_access_token: locals.gcp!.access_token,
-		zone,
-		machineType,
-		name,
-		diskSize,
-		startup,
-		repo,
-		sshKeys,
-		branch
-	});
+		for_keys = locals.SSH_KEYS.get<Podie.SshKeys>(key, 'json').then(
+			(res) => res || {}
+		),
+		for_instances = locals.INSTANCES.get<Podie.Instances>(key, 'json').then(
+			(res) => res || {}
+		),
+		for_create_podie_instance = Promise.all([for_instances, for_formData])
+			.then(([ins, { name, branch, diskSize, startup, machineType }]) => {
+				ins[name] = { repo, branch, zone, diskSize, startup, machineType };
+				return ins;
+			})
+			.then((ins) => locals.INSTANCES.put(key, JSON.stringify(ins))),
+		for_create_gcp_instance = Promise.all([for_keys, for_formData]).then(
+			([keys, { name, diskSize, startup, machineType, branch }]) =>
+				create_instance({
+					project: locals.gcp_project!.id,
+					gh_access_token: locals.gh!.access_token,
+					gcp_access_token: locals.gcp!.access_token,
+					zone,
+					machineType,
+					name,
+					diskSize,
+					startup,
+					repo,
+					sshKeys: Object.values(keys),
+					branch
+				})
+		);
+	await Promise.all([for_create_gcp_instance, for_create_podie_instance]);
 	throw redirect(302, routes.WORKSPACE.INSTANCES.LIST);
 };
