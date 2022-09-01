@@ -29,9 +29,8 @@ export default {
 			},
 			DELETE: {
 				ZONE: (zone: string) => ({
-					RESOURCE_ID: (resourceId: string) => ({
-						DELETE: `/workspace/instance/delete/${zone}/${resourceId}`
-					})
+					RESOURCE_ID: (resourceId: string) =>
+						`/workspace/instance/delete/${zone}/${resourceId}`
 				})
 			}
 		},

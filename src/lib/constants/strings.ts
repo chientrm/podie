@@ -50,5 +50,8 @@ export default {
 	VALUE: 'Value',
 	INSTANCES: 'Instances',
 	PRIVACY_POLICY: 'Privacy Policy',
-	TERMS_AND_CONDITIONS: 'Terms and Conditions'
+	TERMS_AND_CONDITIONS: 'Terms and Conditions',
+	TERMINATE: 'Terminate',
+	MACHINES: 'Machines',
+	STOPPED: 'Stopped'
 };
