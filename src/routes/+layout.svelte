@@ -16,6 +16,7 @@
 	import Google from 'svelte-material-icons/Google.svelte';
 	import '../app.css';
 	import type { LayoutServerData } from './$types';
+	import ExternalAnchor from '$lib/components/ExternalAnchor.svelte';
 
 	export let data: LayoutServerData;
 
@@ -50,13 +51,15 @@
 		<header>
 			<Anchor href={routes.HOME}><h2>{strings.PODIE}</h2></Anchor>
 			<div>
-				<a href={routes.GITHUB.PODIE_REPO} target="_blank">{strings.GITHUB}</a>
+				<ExternalAnchor href={routes.GITHUB.PODIE_REPO} target="_blank">
+					{strings.GITHUB}
+				</ExternalAnchor>
 				<p>
 					{#if data.gh_user}
 						<span>
-							<a href={data.gh_user.html_url} target="_blank">
+							<ExternalAnchor href={data.gh_user.html_url} target="_blank">
 								{data.gh_user.login}
-							</a>
+							</ExternalAnchor>
 						</span>
 					{:else}
 						<a
@@ -90,12 +93,12 @@
 					<p>
 						{#if data.gcp_project}
 							<span>
-								<a
+								<ExternalAnchor
 									href={routes.GCP.PROJECT(data.gcp_project.id).HOME}
 									target="_blank"
 								>
 									{data.gcp_project.id}
-								</a>
+								</ExternalAnchor>
 							</span>
 						{:else}
 							<Anchor href={routes.SELECT_PROJECT}>

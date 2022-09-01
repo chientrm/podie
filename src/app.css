@@ -1,8 +1,10 @@
 a {
-	text-decoration: none;
-}
-a:visited {
 	color: blue;
+	text-decoration: none;
+	transition: color 0.25s ease-in-out;
+}
+a:hover {
+	color: darkblue;
 }
 button,
 input[type='submit'] {
