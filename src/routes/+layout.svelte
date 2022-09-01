@@ -45,72 +45,82 @@
 	<meta name="google-site-verification" content={gsiteVerification} />
 </svelte:head>
 
-<header>
-	<Anchor href={routes.HOME}><h2>{strings.PODIE}</h2></Anchor>
-	<div>
-		<a href={routes.GITHUB.PODIE_REPO} target="_blank">{strings.GITHUB}</a>
-		<p>
-			{#if data.gh_user}
-				<span>
-					<a href={data.gh_user.html_url} target="_blank">
-						{data.gh_user.login}
-					</a>
-				</span>
-			{:else}
-				<a
-					href={routes.GITHUB.AUTHORIZE({
-						client_id: gh_client_id,
-						scope: gh_scope
-					})}
-				>
-					{strings.LOGIN_GITHUB}
-				</a>
-			{/if}
-			<GithubCircle />
-		</p>
-		<p>
-			{#if data.gcp_user}
-				<span>{data.gcp_user.name}</span>
-			{:else}
-				<a
-					href={routes.GCP.AUTHORIZE({
-						client_id: gcp_client_id,
-						redirect_uri: gcp_redirect_uri,
-						scope: gcp_scope
-					})}
-				>
-					{strings.LOGIN_GCP}
-				</a>
-			{/if}
-			<Google />
-		</p>
-		{#if data.gcp_user}
-			<p>
-				{#if data.gcp_project}
-					<span>
+<article>
+	<section>
+		<header>
+			<Anchor href={routes.HOME}><h2>{strings.PODIE}</h2></Anchor>
+			<div>
+				<a href={routes.GITHUB.PODIE_REPO} target="_blank">{strings.GITHUB}</a>
+				<p>
+					{#if data.gh_user}
+						<span>
+							<a href={data.gh_user.html_url} target="_blank">
+								{data.gh_user.login}
+							</a>
+						</span>
+					{:else}
 						<a
-							href={routes.GCP.PROJECT(data.gcp_project.id).HOME}
-							target="_blank"
+							href={routes.GITHUB.AUTHORIZE({
+								client_id: gh_client_id,
+								scope: gh_scope
+							})}
 						>
-							{data.gcp_project.id}
+							{strings.LOGIN_GITHUB}
 						</a>
-					</span>
-				{:else}
-					<a href={routes.SELECT_PROJECT}>{strings.SELECT_PROJECT}</a>
+					{/if}
+					<GithubCircle />
+				</p>
+				<p>
+					{#if data.gcp_user}
+						<span>{data.gcp_user.name}</span>
+					{:else}
+						<a
+							href={routes.GCP.AUTHORIZE({
+								client_id: gcp_client_id,
+								redirect_uri: gcp_redirect_uri,
+								scope: gcp_scope
+							})}
+						>
+							{strings.LOGIN_GCP}
+						</a>
+					{/if}
+					<Google />
+				</p>
+				{#if data.gcp_user}
+					<p>
+						{#if data.gcp_project}
+							<span>
+								<a
+									href={routes.GCP.PROJECT(data.gcp_project.id).HOME}
+									target="_blank"
+								>
+									{data.gcp_project.id}
+								</a>
+							</span>
+						{:else}
+							<a href={routes.SELECT_PROJECT}>{strings.SELECT_PROJECT}</a>
+						{/if}
+						<GoogleCloud />
+					</p>
 				{/if}
-				<GoogleCloud />
-			</p>
-		{/if}
-		{#if data.gh_user && data.gcp_user && data.gcp_project}
-			<Anchor href={routes.WORKSPACE.GET} startsWith={true}>
-				{strings.WORKSPACES}
-			</Anchor>
-		{/if}
-	</div>
-</header>
-<main>
-	<slot />
-</main>
+				{#if data.gh_user && data.gcp_user && data.gcp_project}
+					<Anchor href={routes.WORKSPACE.GET} startsWith={true}>
+						{strings.WORKSPACES}
+					</Anchor>
+				{/if}
+			</div>
+		</header>
+		<main>
+			<slot />
+		</main>
+	</section>
+	<footer>
+		<Anchor href={routes.PRIVACY_POLICY}>{strings.PRIVACY_POLICY}</Anchor>
+		<Anchor href={routes.TERMS_AND_CONDITIONS}
+			>{strings.TERMS_AND_CONDITIONS}</Anchor
+		>
+	</footer>
+</article>
 
 <style>
 	header {
@@ -127,5 +137,17 @@
 		display: flex;
 		align-items: center;
 		gap: 1em;
+	}
+	article {
+		min-height: 100vh;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+	}
+	footer {
+		display: flex;
+		flex-direction: row;
+		gap: 1em;
+		padding: 1em;
 	}
 </style>
