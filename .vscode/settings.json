@@ -3,5 +3,8 @@
 	"editor.formatOnSave": true,
 	"[svg]": {
 		"editor.defaultFormatter": "jock.svg"
+	},
+	"[typescript]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
 	}
 }

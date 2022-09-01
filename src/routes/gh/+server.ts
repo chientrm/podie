@@ -10,5 +10,5 @@ export const GET: RequestHandler = async ({ url, setHeaders }) => {
 		user = await get_user(access_token),
 		gh = await encrypt({ access_token, user });
 	setHeaders(set_gh(gh));
-	throw redirect(302, routes.WORKSPACE.GET);
+	throw redirect(302, routes.REDIRECT);
 };

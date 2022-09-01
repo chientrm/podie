@@ -127,5 +127,6 @@ export default {
 	},
 	SELECT_PROJECT: '/select_project',
 	PRIVACY_POLICY: '/privacy_policy',
-	TERMS_AND_CONDITIONS: '/terms_and_conditions'
+	TERMS_AND_CONDITIONS: '/terms_and_conditions',
+	REDIRECT: '/redirect'
 };
