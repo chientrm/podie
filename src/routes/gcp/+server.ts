@@ -16,5 +16,5 @@ export const GET: RequestHandler = async ({ url, setHeaders }) => {
 		user = await get_user(access_token),
 		value = await encrypt({ access_token, user });
 	setHeaders(set_gcp({ value, maxAge: expires_in - 10 }));
-	throw redirect(302, routes.SELECT_PROJECT);
+	throw redirect(302, routes.REDIRECT);
 };
