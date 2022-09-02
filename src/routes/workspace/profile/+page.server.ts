@@ -14,5 +14,5 @@ export const POST: Action = async ({ request, locals }) => {
 		email = formData.get('email')! as string,
 		key = locals.gh!.user.login;
 	await put_profile(locals.PODIE, key, { name, email });
-	return redirect(302, routes.WORKSPACE.INSTANCES.LIST);
+	throw redirect(302, routes.WORKSPACE.INSTANCES.LIST);
 };

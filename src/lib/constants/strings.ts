@@ -58,5 +58,7 @@ export default {
 	START: 'Start',
 	REFRESHING: 'Refreshing',
 	PROFILE: 'Profile',
-	SAVE: 'Save'
+	SAVE: 'Save',
+	SUBMITING: 'Submiting...',
+	DELETING: 'Deleting...'
 };

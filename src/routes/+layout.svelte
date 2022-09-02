@@ -33,27 +33,39 @@
 
 	afterUpdate(() => {
 		const submit = async (e: SubmitEvent) => {
-			e.preventDefault();
-			// @ts-ignore
-			const body = new FormData(e.target!);
-			// @ts-ignore
-			const url = e.target.action as string;
-			const res = await fetch(url, { method: 'POST', body }).then(check_ok);
-			if (res.url) {
-				goto(res.url);
-			}
-		};
+				e.preventDefault();
+				const form = e.target! as HTMLFormElement,
+					formData = new FormData(form),
+					inputs = document.evaluate(
+						"//input[@type='submit']",
+						form,
+						null,
+						XPathResult.ORDERED_NODE_SNAPSHOT_TYPE
+					);
+				for (let i = 0; i < inputs.snapshotLength; ++i) {
+					const input = inputs.snapshotItem(i)! as HTMLInputElement;
+					input.value = strings.SUBMITING;
+					input.disabled = true;
+				}
+				await fetch(form.action, { method: 'POST', body: formData })
+					.then(check_ok)
+					.then((res) => {
+						if (res.url) {
+							goto(res.url);
+						}
+					});
+			},
+			text = document.createTextNode(strings.DELETING),
+			click = async (e: MouseEvent) => {
+				e.preventDefault();
+				const a = e.target as HTMLAnchorElement;
+				a.replaceWith(text);
+				await fetch(a.href).then(check_ok);
+				invalidateAll();
+			};
 		for (const form of document.getElementsByTagName('form')) {
 			form.onsubmit = submit;
 		}
-		const click = async (e: MouseEvent) => {
-			e.preventDefault();
-			const a = e.target as HTMLAnchorElement;
-			await fetch(a.href)
-				.then(check_ok)
-				.then((res) => res.json());
-			invalidateAll();
-		};
 		for (const e of document.getElementsByTagName('a')) {
 			const a = e as HTMLAnchorElement;
 			if (a.href.includes('delete')) {
