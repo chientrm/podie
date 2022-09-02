@@ -1,6 +1,6 @@
 import { parse, serialize } from 'cookie';
 
-const GH = 'gh',
+const GH = 'gh_1',
 	GCP = 'gcp',
 	GCP_PROJECT = 'gcp_proj',
 	set_cookie = ({

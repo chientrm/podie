@@ -5,8 +5,7 @@ import { decrypt } from '$lib/helpers/encryption';
 import type { Handle, HandleError } from '@sveltejs/kit';
 import Toucan from 'toucan-js';
 
-const ssh_keys: Record<string, string> = {};
-const instances: Record<string, string> = {};
+const podie: Record<string, string> = {};
 
 export const handle: Handle = async ({ event, resolve }) => {
 	const { request } = event,
@@ -25,8 +24,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 		//@ts-ignore
 		event.locals.gcp_project = await decrypt(gcp_project_cookie);
 	}
-	event.locals.SSH_KEYS = event.platform?.env.SSH_KEYS || kv(ssh_keys);
-	event.locals.INSTANCES = event.platform?.env.INSTANCES || kv(instances);
+	event.locals.PODIE = event.platform?.env.PODIE || kv(podie);
 	return resolve(event);
 };
 

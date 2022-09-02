@@ -1,6 +1,5 @@
+import { get_ssh_keys } from '$lib/helpers/cloudflare';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals }) =>
-	locals.SSH_KEYS.get<Podie.SshKeys>(locals.gh!.user.login, 'json')
-		.then((keys) => keys || {})
-		.then((keys) => ({ keys }));
+	get_ssh_keys(locals.PODIE, locals.gh!.user.login).then((keys) => ({ keys }));

@@ -1,6 +1,8 @@
 <script lang="ts">
+	import { goto, invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
 	import Anchor from '$lib/components/Anchor.svelte';
+	import ExternalAnchor from '$lib/components/ExternalAnchor.svelte';
 	import {
 		client_id as gcp_client_id,
 		redirect_uri as gcp_redirect_uri
@@ -10,14 +12,14 @@
 	import strings from '$lib/constants/strings';
 	import logo from '$lib/images/logo.png';
 	import favicon from '$lib/images/logo.svg';
+	import { check_ok } from '$lib/utils';
 	import 'modern-normalize/modern-normalize.css';
+	import { afterUpdate } from 'svelte';
 	import GithubCircle from 'svelte-material-icons/GithubCircle.svelte';
-	import GoogleCloud from 'svelte-material-icons/GoogleCloud.svelte';
 	import Google from 'svelte-material-icons/Google.svelte';
+	import GoogleCloud from 'svelte-material-icons/GoogleCloud.svelte';
 	import '../app.css';
 	import type { LayoutServerData } from './$types';
-	import ExternalAnchor from '$lib/components/ExternalAnchor.svelte';
-
 	export let data: LayoutServerData;
 
 	const gh_scope = ['repo'].join(' '),
@@ -28,6 +30,37 @@
 			'https://www.googleapis.com/auth/compute'
 		].join(' '),
 		gsiteVerification = 'gG8WXVPtqVVAJlnJb5v0LlC0-HBSCVSWsVqa7KHwTPA';
+
+	afterUpdate(() => {
+		const submit = async (e: SubmitEvent) => {
+			e.preventDefault();
+			// @ts-ignore
+			const body = new FormData(e.target!);
+			// @ts-ignore
+			const url = e.target.action as string;
+			const res = await fetch(url, { method: 'POST', body }).then(check_ok);
+			if (res.url) {
+				goto(res.url);
+			}
+		};
+		for (const form of document.getElementsByTagName('form')) {
+			form.onsubmit = submit;
+		}
+		const click = async (e: MouseEvent) => {
+			e.preventDefault();
+			const a = e.target as HTMLAnchorElement;
+			await fetch(a.href)
+				.then(check_ok)
+				.then((res) => res.json());
+			invalidateAll();
+		};
+		for (const e of document.getElementsByTagName('a')) {
+			const a = e as HTMLAnchorElement;
+			if (a.href.includes('delete')) {
+				a.onclick = click;
+			}
+		}
+	});
 </script>
 
 <svelte:head>

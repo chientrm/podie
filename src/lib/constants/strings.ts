@@ -56,5 +56,7 @@ export default {
 	TERMINATED: 'Terminated',
 	ACTION: 'Action',
 	START: 'Start',
-	REFRESHING: 'Refreshing'
+	REFRESHING: 'Refreshing',
+	PROFILE: 'Profile',
+	SAVE: 'Save'
 };

@@ -7,7 +7,10 @@ import { redirect, type RequestHandler } from '@sveltejs/kit';
 export const GET: RequestHandler = async ({ url, setHeaders }) => {
 	const code = url.searchParams.get('code')!,
 		access_token = await get_access_token(code),
-		user = await get_user(access_token),
+		user = await get_user(access_token).then(({ login, html_url }) => ({
+			login,
+			html_url
+		})),
 		gh = await encrypt({ access_token, user });
 	setHeaders(set_gh(gh));
 	throw redirect(302, routes.REDIRECT);

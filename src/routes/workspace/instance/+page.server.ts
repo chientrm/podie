@@ -1,3 +1,4 @@
+import { get_instances } from '$lib/helpers/cloudflare';
 import { list_instances } from '$lib/helpers/gcp';
 import type { PageServerLoad } from './$types';
 
@@ -7,9 +8,7 @@ export const load: PageServerLoad = async ({ locals }) =>
 			id: locals.gcp_project!.id,
 			access_token: locals.gcp!.access_token
 		}),
-		locals.INSTANCES.get<Podie.Instances>(locals.gh!.user.login, 'json').then(
-			(res) => res || {}
-		)
+		get_instances(locals.PODIE, locals.gh!.user.login)
 	]).then(([gcp_instances, podie_instances]) => ({
 		gcp_instances: gcp_instances.reduce(
 			(a, { name, status, networkInterfaces, zone }) => ({
