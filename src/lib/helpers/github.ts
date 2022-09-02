@@ -19,9 +19,9 @@ const get_access_token = (code: string) =>
 			}
 		}).then(check_ok),
 	get_user = (access_token: string) =>
-		f(routes.GITHUB.USER, access_token)
-			.then((res) => res.json<{ login: string; html_url: string }>())
-			.then(({ login, html_url }) => ({ login, html_url })),
+		f(routes.GITHUB.USER, access_token).then((res) =>
+			res.json<{ login: string; html_url: string }>()
+		),
 	list_repoes = (access_token: string) =>
 		f(routes.GITHUB.REPOS, access_token)
 			.then((res) => res.json<{ full_name: string }[]>())

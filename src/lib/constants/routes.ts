@@ -42,7 +42,8 @@ export default {
 		},
 		SSH_KEY: (name: string) => ({
 			DELETE: `/workspace/ssh_key/delete/${name}`
-		})
+		}),
+		PROFILE: '/workspace/profile'
 	},
 	LET_US_KNOW: '/letusknow',
 	THANK: (email: string) => ({

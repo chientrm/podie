@@ -11,6 +11,9 @@
 	<h3>
 		<Anchor href={routes.WORKSPACE.SSH_KEYS.LIST}>{strings.SSH_KEYS}</Anchor>
 	</h3>
+	<h3>
+		<Anchor href={routes.WORKSPACE.PROFILE}>{strings.PROFILE}</Anchor>
+	</h3>
 </nav>
 
 <slot />

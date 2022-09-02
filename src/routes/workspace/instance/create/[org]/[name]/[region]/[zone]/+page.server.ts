@@ -1,4 +1,10 @@
 import routes from '$lib/constants/routes';
+import {
+	get_instances,
+	get_profile,
+	get_ssh_keys,
+	put_instances
+} from '$lib/helpers/cloudflare';
 import { create_instance, list_machine_types } from '$lib/helpers/gcp';
 import { list_branches } from '$lib/helpers/github';
 import { redirect } from '@sveltejs/kit';
@@ -7,24 +13,22 @@ import type { Action, PageServerLoad } from './$types';
 export const load: PageServerLoad = async ({ params, locals }) => {
 	const { org, name, zone } = params,
 		project = locals.gcp_project!.id,
-		for_branches = list_branches({
-			access_token: locals.gh!.access_token,
-			repo: `${org}/${name}`
-		}),
-		for_machine_types = list_machine_types({
-			project,
-			access_token: locals.gcp!.access_token,
-			zone
-		}),
 		[branches, machine_types] = await Promise.all([
-			for_branches,
-			for_machine_types
+			list_branches({
+				access_token: locals.gh!.access_token,
+				repo: `${org}/${name}`
+			}),
+			list_machine_types({
+				project,
+				access_token: locals.gcp!.access_token,
+				zone
+			})
 		]);
 	return { branches, machine_types, zone };
 };
 
 export const POST: Action = async ({ request, params, locals }) => {
-	const for_formData = request.formData().then((formData) => ({
+	const for_form = request.formData().then((formData) => ({
 			branch: formData.get('branch')! as string,
 			name: formData.get('name')! as string,
 			diskSize: parseInt(formData.get('disk_size')! as string),
@@ -34,21 +38,23 @@ export const POST: Action = async ({ request, params, locals }) => {
 		{ org, name: repoName, zone } = params,
 		repo = `${org}/${repoName}`,
 		key = locals.gh!.user.login,
-		for_keys = locals.SSH_KEYS.get<Podie.SshKeys>(key, 'json').then(
-			(res) => res || {}
-		),
-		for_instances = locals.INSTANCES.get<Podie.Instances>(key, 'json').then(
-			(res) => res || {}
-		),
-		for_create_podie_instance = Promise.all([for_instances, for_formData])
+		for_profile = get_profile(locals.PODIE, key),
+		for_keys = get_ssh_keys(locals.PODIE, key),
+		for_instances = get_instances(locals.PODIE, key),
+		for_create_podie_instance = Promise.all([for_instances, for_form])
 			.then(([ins, { name, branch, diskSize, startup, machineType }]) => {
 				ins[name] = { repo, branch, zone, diskSize, startup, machineType };
 				return ins;
 			})
-			.then((ins) => locals.INSTANCES.put(key, JSON.stringify(ins))),
-		for_create_gcp_instance = Promise.all([for_keys, for_formData]).then(
-			([keys, { name, diskSize, startup, machineType, branch }]) =>
+			.then((ins) => put_instances(locals.PODIE, key, ins)),
+		for_create_gcp_instance = Promise.all([
+			for_profile,
+			for_keys,
+			for_form
+		]).then(
+			([profile, keys, { name, diskSize, startup, machineType, branch }]) =>
 				create_instance({
+					profile,
 					project: locals.gcp_project!.id,
 					gh_access_token: locals.gh!.access_token,
 					gcp_access_token: locals.gcp!.access_token,

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { invalidate } from '$app/navigation';
+	import { invalidateAll } from '$app/navigation';
 	import ExternalAnchor from '$lib/components/ExternalAnchor.svelte';
 	import routes from '$lib/constants/routes';
 	import strings from '$lib/constants/strings';
@@ -10,7 +10,7 @@
 	let refreshing = false;
 	const refresh = async () => {
 		refreshing = true;
-		await invalidate();
+		await invalidateAll();
 		refreshing = false;
 	};
 </script>

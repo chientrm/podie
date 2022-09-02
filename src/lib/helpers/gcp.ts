@@ -138,13 +138,14 @@ const get_gcp_tokens = async ({
 		initializeParams: {
 			diskSizeGb: diskSize,
 			sourceImage:
-				'projects/cos-cloud/global/images/cos-stable-97-16919-103-28',
+				'projects/debian-cloud/global/images/debian-11-bullseye-v20220822',
 			diskType: `zones/${zone}/diskTypes/pd-ssd`
 		},
 		autoDelete: true,
 		boot: true
 	}),
 	create_instance = ({
+		profile,
 		project,
 		gcp_access_token,
 		gh_access_token,
@@ -157,6 +158,7 @@ const get_gcp_tokens = async ({
 		sshKeys,
 		branch
 	}: {
+		profile: Podie.Profile | null;
 		project: string;
 		gcp_access_token: string;
 		gh_access_token: string;
@@ -185,14 +187,25 @@ const get_gcp_tokens = async ({
 						{
 							key: 'startup-script',
 							value: [
-								`git clone --branch ${branch} https://${gh_access_token}@github.com/${repo} /home/podie/workspace`,
-								'cd /home/podie/workspace',
+								'apt-get update',
+								'apt-get install -y git',
+								`git clone --branch ${branch} https://${gh_access_token}@github.com/${repo} /root/workspace`,
+								...(profile
+									? [
+											`git config --global user.name "${profile.name}"`,
+											`git config --global user.email "${profile.email}"`
+									  ]
+									: []),
+								"sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/g' /etc/ssh/sshd_config",
+								"sed -i 's/PermitRootLogin no/PermitRootLogin yes/g' /etc/ssh/sshd_config",
+								'service ssh restart',
+								'cd /root/workspace',
 								startup
 							].join('\n')
 						},
 						{
 							key: 'ssh-keys',
-							value: `podie:${sshKeys.join('\n')}`
+							value: `root:${sshKeys.join('\n')}`
 						}
 					]
 				}
