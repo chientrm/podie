@@ -11,6 +11,7 @@
 	import 'modern-normalize/modern-normalize.css';
 	import { afterUpdate } from 'svelte';
 	import GithubCircle from 'svelte-material-icons/GithubCircle.svelte';
+	import Discord from 'svelte-material-icons/Discord.svelte';
 	import '../app.css';
 	import type { LayoutServerData } from './$types';
 	export let data: LayoutServerData;
@@ -87,10 +88,8 @@
 		<header>
 			<Anchor href={routes.HOME}><h2>{strings.PODIE}</h2></Anchor>
 			<div>
-				<a href={routes.GITHUB.PODIE_REPO} target="_blank">
-					{strings.PODIE}
-					<GithubCircle />
-				</a>
+				<a href={routes.GITHUB.PODIE_REPO} target="_blank"><GithubCircle /></a>
+				<a href={routes.DISCORD} target="_blank"><Discord /></a>
 				{#if data.user}
 					{#if data.user.gh}
 						<ExternalAnchor
