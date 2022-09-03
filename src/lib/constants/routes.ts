@@ -88,37 +88,11 @@ export default {
 		})
 	},
 	GCP: {
-		REDIRECT: '/gcp',
 		PROJECT_CREATE: 'https://console.cloud.google.com/projectcreate',
 		IAM: 'https://console.cloud.google.com/iam-admin/iam',
-		AUTHORIZE: ({
-			client_id,
-			redirect_uri,
-			scope
-		}: {
-			client_id: string;
-			redirect_uri: string;
-			scope: string;
-		}) => {
-			const url = new URL('https://accounts.google.com/o/oauth2/v2/auth');
-			url.searchParams.append('client_id', client_id);
-			url.searchParams.append('redirect_uri', redirect_uri);
-			url.searchParams.append('response_type', 'code');
-			url.searchParams.append('include_granted_scopes', 'true');
-			url.searchParams.append('access_type', 'offline');
-			url.searchParams.append('scope', scope);
-			return url.href;
-		},
-		TOKEN: 'https://oauth2.googleapis.com/token',
-		USER_INFO: 'https://www.googleapis.com/oauth2/v3/userinfo',
-		PROJECTS: {
-			LIST: 'https://cloudresourcemanager.googleapis.com/v1/projects'
-		},
 		PROJECT: (project: string) => ({
 			IAM: `https://console.cloud.google.com/iam-admin/iam?project=${project}`,
 			COMPUTE_API: `https://console.cloud.google.com/apis/library/compute.googleapis.com?project=${project}`,
-			GET: `https://cloudresourcemanager.googleapis.com/v1/projects/${project}`,
-			HOME: `https://console.cloud.google.com/compute/instances?project=${project}`,
 			INSTANCES: {
 				AGGREGATE: `https://compute.googleapis.com/compute/v1/projects/${project}/aggregated/instances`
 			},
@@ -138,7 +112,6 @@ export default {
 			}
 		})
 	},
-	SELECT_PROJECT: '/select_project',
 	PRIVACY_POLICY: '/privacy_policy',
 	TERMS_AND_CONDITIONS: '/terms_and_conditions',
 	REDIRECT: '/redirect'
