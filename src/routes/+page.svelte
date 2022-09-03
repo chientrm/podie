@@ -5,20 +5,8 @@
 </script>
 
 <p>{strings.DESCRIPTION}</p>
-<p>
-	Don't get me wrong, I love Gitpod.io and Codespace ❤️, been using them for
-	half a year.
-</p>
-<p>
-	How to use: Login Github -> Login GCP -> Select GCP Project -> Create instance
-	🚀 -> 'ssh root@ip_address'
-</p>
 <p>Make sure to add your public SSH key 🤦‍♂️</p>
 <p>Be careful not to accidentially create a super compute instance 🤑🤑🤑</p>
-<!-- <p>
-	Also you're free to choose machine image. Docker machine is just an another
-	option 🥱🥱🥱
-</p> -->
 <p>Podie is open source and non-profit 🎉🎉🎉.</p>
 <p>Anyway, Podie is currently in beta testing 🥺🥺🥺</p>
 <p>
