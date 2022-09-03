@@ -3,5 +3,8 @@
 </script>
 
 <svelte:head>
-	<meta http-equiv="refresh" content="0;URL='{routes.HOME}'" />
+	<meta
+		http-equiv="refresh"
+		content="0;URL='{routes.WORKSPACE.INTEGRATIONS.LIST}'"
+	/>
 </svelte:head>
