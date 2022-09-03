@@ -1,3 +1,3 @@
 # Podie
 
-It's like Gitpod.io and Codespace but running on your own infrastructure 👍.
+You add Podie to your Cloud, select repository, create instance and "ssh root@<ip-address>" 👍.
