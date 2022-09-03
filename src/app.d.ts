@@ -1,10 +1,16 @@
 declare namespace App {
 	interface Locals {
-		gh:
-			| undefined
-			| { access_token: string; user: { login: string; html_url: string } };
-		gcp: undefined | { access_token: string; user: { name: string } };
-		gcp_project: undefined | { id: string };
+		user?: {
+			gh?: {
+				access_token: string;
+				id: number;
+				login: string;
+				html_url: string;
+				email: string;
+				name;
+				string;
+			};
+		};
 		PODIE: KVNamespace;
 	}
 	// interface PageData {}
@@ -29,5 +35,8 @@ declare namespace Podie {
 	interface Profile {
 		name: string;
 		email: string;
+	}
+	interface Integrations {
+		gcp_pid?: string;
 	}
 }

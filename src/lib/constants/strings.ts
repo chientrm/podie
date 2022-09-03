@@ -60,5 +60,11 @@ export default {
 	PROFILE: 'Profile',
 	SAVE: 'Save',
 	SUBMITING: 'Submiting...',
-	DELETING: 'Deleting...'
+	DELETING: 'Deleting...',
+	CONTINUE_WITH_GITHUB: 'Continue with Github',
+	INTEGRATIONS: 'Integrations',
+	GCP_PROJECT_ID: 'GCP Project id',
+	GOOGLE_IAM: 'Google Console IAM',
+	GOOGLE_CLOUD: 'Google cloud',
+	NEW_GCP_PROJECT: 'New Google Cloud project'
 };

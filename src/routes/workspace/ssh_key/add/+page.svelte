@@ -1,10 +1,9 @@
 <script lang="ts">
 	import patterns from '$lib/constants/patterns';
-	import routes from '$lib/constants/routes';
 	import strings from '$lib/constants/strings';
 </script>
 
-<form method="POST" action={routes.WORKSPACE.SSH_KEYS.ADD}>
+<form method="POST">
 	<label>
 		<span>{strings.NAME}</span>
 		<input

@@ -43,7 +43,10 @@ export default {
 		SSH_KEY: (name: string) => ({
 			DELETE: `/workspace/ssh_key/delete/${name}`
 		}),
-		PROFILE: '/workspace/profile'
+		INTEGRATIONS: {
+			LIST: '/workspace/integrations',
+			GCP: '/workspace/integrations/gcp'
+		}
 	},
 	LET_US_KNOW: '/letusknow',
 	THANK: (email: string) => ({
@@ -72,10 +75,13 @@ export default {
 			url.searchParams.append('code', code);
 			return url.href;
 		},
+		PROFILE: (profile: string) => `https://github.com/${profile}`,
 		USER: 'https://api.github.com/user',
+		EMAILS: 'https://api.github.com/user/emails',
 		REPOS: 'https://api.github.com/user/repos?per_page=100',
 		REPO: (repo: string) => ({
 			VIEW: `https://github.com/${repo}`,
+			GET: `https://api.github.com/repos/${repo}`,
 			BRANCHES: {
 				LIST: `https://api.github.com/repos/${repo}/branches`
 			}
@@ -83,6 +89,8 @@ export default {
 	},
 	GCP: {
 		REDIRECT: '/gcp',
+		PROJECT_CREATE: 'https://console.cloud.google.com/projectcreate',
+		IAM: 'https://console.cloud.google.com/iam-admin/iam',
 		AUTHORIZE: ({
 			client_id,
 			redirect_uri,
@@ -107,6 +115,8 @@ export default {
 			LIST: 'https://cloudresourcemanager.googleapis.com/v1/projects'
 		},
 		PROJECT: (project: string) => ({
+			IAM: `https://console.cloud.google.com/iam-admin/iam?project=${project}`,
+			COMPUTE_API: `https://console.cloud.google.com/apis/library/compute.googleapis.com?project=${project}`,
 			GET: `https://cloudresourcemanager.googleapis.com/v1/projects/${project}`,
 			HOME: `https://console.cloud.google.com/compute/instances?project=${project}`,
 			INSTANCES: {
