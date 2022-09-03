@@ -18,7 +18,8 @@ input,
 select {
 	padding: 0.5em;
 }
-form {
+form,
+ol {
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;

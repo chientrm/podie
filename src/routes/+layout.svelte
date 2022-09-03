@@ -3,11 +3,6 @@
 	import { page } from '$app/stores';
 	import Anchor from '$lib/components/Anchor.svelte';
 	import ExternalAnchor from '$lib/components/ExternalAnchor.svelte';
-	import {
-		client_id as gcp_client_id,
-		redirect_uri as gcp_redirect_uri
-	} from '$lib/configs/gcp.json';
-	import { client_id as gh_client_id } from '$lib/configs/github.json';
 	import routes from '$lib/constants/routes';
 	import strings from '$lib/constants/strings';
 	import logo from '$lib/images/logo.png';
@@ -16,20 +11,11 @@
 	import 'modern-normalize/modern-normalize.css';
 	import { afterUpdate } from 'svelte';
 	import GithubCircle from 'svelte-material-icons/GithubCircle.svelte';
-	import Google from 'svelte-material-icons/Google.svelte';
-	import GoogleCloud from 'svelte-material-icons/GoogleCloud.svelte';
 	import '../app.css';
 	import type { LayoutServerData } from './$types';
 	export let data: LayoutServerData;
 
-	const gh_scope = ['repo'].join(' '),
-		gcp_scope = [
-			'https://www.googleapis.com/auth/userinfo.email',
-			'https://www.googleapis.com/auth/userinfo.profile',
-			'https://www.googleapis.com/auth/cloud-platform',
-			'https://www.googleapis.com/auth/compute'
-		].join(' '),
-		gsiteVerification = 'gG8WXVPtqVVAJlnJb5v0LlC0-HBSCVSWsVqa7KHwTPA';
+	const gsiteVerification = 'gG8WXVPtqVVAJlnJb5v0LlC0-HBSCVSWsVqa7KHwTPA';
 
 	afterUpdate(() => {
 		const submit = async (e: SubmitEvent) => {
@@ -44,24 +30,29 @@
 					);
 				for (let i = 0; i < inputs.snapshotLength; ++i) {
 					const input = inputs.snapshotItem(i)! as HTMLInputElement;
+					input.alt = input.value;
 					input.value = strings.SUBMITING;
 					input.disabled = true;
 				}
-				await fetch(form.action, { method: 'POST', body: formData })
-					.then(check_ok)
-					.then((res) => {
-						if (res.url) {
-							goto(res.url);
-						}
-					});
+				const res = await fetch(form.action, {
+					method: 'POST',
+					body: formData
+				}).then(check_ok);
+				if (res.url) {
+					await goto(res.url).then(invalidateAll);
+				}
+				for (let i = 0; i < inputs.snapshotLength; ++i) {
+					const input = inputs.snapshotItem(i)! as HTMLInputElement;
+					input.value = input.alt;
+					input.disabled = false;
+				}
 			},
-			text = document.createTextNode(strings.DELETING),
+			text = document.createTextNode(strings.SUBMITING),
 			click = async (e: MouseEvent) => {
 				e.preventDefault();
 				const a = e.target as HTMLAnchorElement;
 				a.replaceWith(text);
-				await fetch(a.href).then(check_ok);
-				invalidateAll();
+				await fetch(a.href).then(check_ok).then(invalidateAll);
 			};
 		for (const form of document.getElementsByTagName('form')) {
 			form.onsubmit = submit;
@@ -96,67 +87,24 @@
 		<header>
 			<Anchor href={routes.HOME}><h2>{strings.PODIE}</h2></Anchor>
 			<div>
-				<ExternalAnchor href={routes.GITHUB.PODIE_REPO} target="_blank">
-					{strings.GITHUB}
-				</ExternalAnchor>
-				<p>
-					{#if data.gh_user}
-						<span>
-							<ExternalAnchor href={data.gh_user.html_url} target="_blank">
-								{data.gh_user.login}
-							</ExternalAnchor>
-						</span>
-					{:else}
-						<a
-							href={routes.GITHUB.AUTHORIZE({
-								client_id: gh_client_id,
-								scope: gh_scope
-							})}
-						>
-							{strings.LOGIN_GITHUB}
-						</a>
-					{/if}
+				<a href={routes.GITHUB.PODIE_REPO} target="_blank">
+					{strings.PODIE}
 					<GithubCircle />
-				</p>
-				<p>
-					{#if data.gcp_user}
-						<span>{data.gcp_user.name}</span>
-					{:else}
-						<a
-							href={routes.GCP.AUTHORIZE({
-								client_id: gcp_client_id,
-								redirect_uri: gcp_redirect_uri,
-								scope: gcp_scope
-							})}
+				</a>
+				{#if data.user}
+					{#if data.user.gh}
+						<ExternalAnchor
+							href={routes.GITHUB.PROFILE(data.user.gh.login)}
+							target="_blank"
 						>
-							{strings.LOGIN_GCP}
-						</a>
+							{data.user.gh.login}
+						</ExternalAnchor>
 					{/if}
-					<Google />
-				</p>
-				{#if data.gcp_user}
-					<p>
-						{#if data.gcp_project}
-							<span>
-								<ExternalAnchor
-									href={routes.GCP.PROJECT(data.gcp_project.id).HOME}
-									target="_blank"
-								>
-									{data.gcp_project.id}
-								</ExternalAnchor>
-							</span>
-						{:else}
-							<Anchor href={routes.SELECT_PROJECT}>
-								{strings.SELECT_PROJECT}
-							</Anchor>
-						{/if}
-						<GoogleCloud />
-					</p>
-				{/if}
-				{#if data.gh_user && data.gcp_user && data.gcp_project}
 					<Anchor href={routes.WORKSPACE.GET} startsWith={true}>
 						{strings.WORKSPACES}
 					</Anchor>
+				{:else}
+					<Anchor href={routes.LOGIN}>{strings.LOGIN}</Anchor>
 				{/if}
 			</div>
 		</header>
@@ -198,6 +146,6 @@
 		display: flex;
 		flex-direction: row;
 		gap: 1em;
-		padding: 1em;
+		padding: 2em 1em;
 	}
 </style>
