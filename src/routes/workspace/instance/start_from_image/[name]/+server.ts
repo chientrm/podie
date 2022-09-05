@@ -24,7 +24,8 @@ export const GET: RequestHandler = async ({ locals, params }) => {
 					org,
 					repo_name,
 					keys,
-					branch
+					branch,
+					source_image: `projects/${project}/global/images/${name}`
 				})
 		);
 	await for_create_gcp_instance;

@@ -34,7 +34,26 @@ export default {
 				})
 			},
 			START: (name: string) => `/workspace/instance/start/${name}`,
+			START_FROM_IMAGE: (name: string) =>
+				`/workspace/instance/start_from_image/${name}`,
 			DELETE: (name: string) => `/workspace/instance/delete/${name}`
+		},
+		INSTANCE: (name: string) => ({
+			EDIT: `/workspace/instance/edit/${name}`,
+			REGION: (region: string) => ({
+				ZONE: (zone: string) => ({
+					EDIT: `/workspace/instance/edit/${name}/${region}/${zone}`
+				})
+			}),
+			ZONE: (zone: string) => ({
+				EDIT: `/workspace/instance/edit/${name}/${zone}`
+			})
+		}),
+		IMAGES: {
+			CREATE: {
+				GET: '/workspace/image/create'
+			},
+			LIST: '/workspace/image'
 		},
 		SSH_KEYS: {
 			LIST: '/workspace/ssh_key',
@@ -79,12 +98,14 @@ export default {
 		USER: 'https://api.github.com/user',
 		EMAILS: 'https://api.github.com/user/emails',
 		REPOS: 'https://api.github.com/user/repos?per_page=100',
-		REPO: (repo: string) => ({
-			VIEW: `https://github.com/${repo}`,
-			GET: `https://api.github.com/repos/${repo}`,
-			BRANCHES: {
-				LIST: `https://api.github.com/repos/${repo}/branches`
-			}
+		ORG: (org: string) => ({
+			REPO: (repo: string) => ({
+				VIEW: `https://github.com/${org}/${repo}`,
+				GET: `https://api.github.com/repos/${org}/${repo}`,
+				BRANCHES: {
+					LIST: `https://api.github.com/repos/${org}/${repo}/branches`
+				}
+			})
 		})
 	},
 	GCP: {
@@ -107,6 +128,10 @@ export default {
 					LIST: `https://compute.googleapis.com/compute/v1/projects/${project}/zones/${zone}/machineTypes`
 				}
 			}),
+			IMAGES: {
+				LIST: `https://compute.googleapis.com/compute/v1/projects/${project}/global/images`,
+				CREATE: `https://www.googleapis.com/compute/v1/projects/${project}/global/images?forceCreate=true`
+			},
 			REGIONS: {
 				LIST: `https://compute.googleapis.com/compute/v1/projects/${project}/regions`
 			}

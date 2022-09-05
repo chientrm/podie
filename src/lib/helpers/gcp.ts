@@ -91,11 +91,20 @@ const PROJECT = 'https://compute.googleapis.com/compute/v1/projects/',
 			.then((res) =>
 				res.items.map(({ name, description }) => ({ name, description }))
 			),
-	DISK = ({ zone, diskSize }: { zone: string; diskSize: number }) => ({
+	DISK = ({
+		zone,
+		disk_size,
+		source_image
+	}: {
+		zone: string;
+		disk_size: number;
+		source_image?: string;
+	}) => ({
 		initializeParams: {
-			diskSizeGb: diskSize,
+			diskSizeGb: disk_size,
 			sourceImage:
-				'projects/debian-cloud/global/images/debian-11-bullseye-v20220822',
+				source_image ??
+				'projects/cos-cloud/global/images/cos-stable-97-16919-103-33',
 			diskType: `zones/${zone}/diskTypes/pd-ssd`
 		},
 		autoDelete: true,
@@ -104,64 +113,98 @@ const PROJECT = 'https://compute.googleapis.com/compute/v1/projects/',
 	create_instance = async ({
 		project,
 		zone,
-		machineType,
+		machine_type,
 		name,
-		diskSize,
-		startup,
-		repo,
-		sshKeys,
+		disk_size,
+		org,
+		repo_name,
+		keys,
 		branch,
-		gh
+		gh,
+		source_image
 	}: {
 		project: string;
 		zone: string;
-		machineType: string;
+		machine_type: string;
 		name: string;
-		diskSize: number;
-		startup: string;
-		repo: string;
+		disk_size: number;
+		org: string;
+		repo_name: string;
 		branch: string;
-		sshKeys: string[];
-		gh: { access_token: string; name: string; email: string };
+		source_image?: string;
+		keys: Record<string, string>;
+		gh: { access_token: string; name: string; email: string; login: string };
 	}) =>
 		fetch(routes.GCP.PROJECT(project).ZONE(zone).INSTANCES.INSERT, {
 			method: 'POST',
 			headers: await get_auth(),
 			body: JSON.stringify({
 				name,
-				machineType: `zones/${zone}/machineTypes/${machineType}`,
-				disks: [DISK({ diskSize, zone })],
+				machineType: `zones/${zone}/machineTypes/${machine_type}`,
+				disks: [DISK({ disk_size, zone, source_image })],
 				networkInterfaces: [{ accessConfigs: [{ networkTier: 'PREMIUM' }] }],
 				metadata: {
 					items: [
 						{
 							key: 'startup-script',
 							value: [
-								'apt-get update',
-								'apt-get install -y git',
-								`git clone --branch ${branch} https://${gh.access_token}@github.com/${repo} /root/workspace`,
-								`git config --global user.name "${gh.name}"`,
-								`git config --global user.email "${gh.email}"`,
-								"sed -i 's/#PubkeyAuthentication yes/PubkeyAuthentication yes/g' /etc/ssh/sshd_config",
-								"sed -i 's/PermitRootLogin no/PermitRootLogin yes/g' /etc/ssh/sshd_config",
-								'service ssh restart',
-								'cd /root/workspace',
-								startup
+								`rm -rf /home/${gh.login}/${repo_name}`,
+								`git clone --branch ${branch} https://${gh.access_token}@github.com/${org}/${repo_name} /home/${gh.login}/${repo_name}`,
+								`sudo chown -R ${gh.login} /home/${gh.login}/${repo_name}`,
+								"echo 'PubkeyAuthentication yes' >> /etc/ssh/sshd_config",
+								`echo 'cd /home/${gh.login}/${repo_name}' >> /home/${gh.login}/.bashrc`,
+								`echo 'git config --global user.name "${gh.name}"' >> /home/${gh.login}/.bashrc`,
+								`echo 'git config --global user.email "${gh.email}"' >> /home/${gh.login}/.bashrc`
 							].join('\n')
 						},
 						{
 							key: 'ssh-keys',
-							value: `root:${sshKeys.join('\n')}`
+							value: `${gh.login}:${Object.values(keys).join('\n')}`
 						}
 					]
 				}
 			})
-		}).then(check_ok);
+		}).then(check_ok),
+	create_image = async ({
+		project,
+		name,
+		region,
+		instance_name,
+		instance_zone
+	}: {
+		project: string;
+		name: string;
+		region: string;
+		instance_name: string;
+		instance_zone: string;
+	}) =>
+		fetch(routes.GCP.PROJECT(project).IMAGES.CREATE, {
+			method: 'POST',
+			headers: await get_auth(),
+			body: JSON.stringify({
+				name,
+				sourceDisk: `projects/${project}/zones/${instance_zone}/disks/${instance_name}`,
+				storageLocations: [region]
+			})
+		}).then(check_ok),
+	list_images = ({ project }: { project: string }) =>
+		f(routes.GCP.PROJECT(project).IMAGES.LIST).then((res) =>
+			res.json<{
+				items: {
+					name: string;
+					status: string;
+					diskSizeGb: number;
+					storageLocations: string[];
+				}[];
+			}>()
+		);
 
 export {
 	list_instances,
 	delete_instance,
 	create_instance,
 	list_regions,
-	list_machine_types
+	list_machine_types,
+	create_image,
+	list_images
 };
