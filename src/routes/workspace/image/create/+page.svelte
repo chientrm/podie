@@ -7,7 +7,7 @@
 </script>
 
 {#if instance}
-	<form method="POST"> 
+	<form method="POST">
 		<label>
 			<span>{strings.FROM_INSTANCE}</span>
 			<select bind:value={instance}>
@@ -21,5 +21,5 @@
 		<input type="submit" value={strings.CREATE} />
 	</form>
 {:else}
-	<p>Need a running intance in order to create image</p>
+	<p>Need a running instance in order to create image</p>
 {/if}
