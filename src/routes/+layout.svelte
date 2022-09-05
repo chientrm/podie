@@ -42,9 +42,9 @@
 					input.disabled = true;
 				});
 				await fetch(form.action, { method: 'POST', body: formData }).then(
-					(res) => {
+					async (res) => {
 						if (res.url) {
-							goto(res.url);
+							await goto(res.url);
 						} else {
 							invalidateAll();
 						}
@@ -60,7 +60,7 @@
 				const a = e.target as HTMLAnchorElement,
 					href = a.href,
 					anchors = evaluate(
-						"//a[contains(@href,'delete') or contains(@href,'terminate') or contains(@href,'start')",
+						"//a[contains(@href,'delete') or contains(@href,'terminate') or contains(@href,'start')]",
 						document.body
 					) as HTMLAnchorElement[];
 				anchors.forEach((anchor) => {

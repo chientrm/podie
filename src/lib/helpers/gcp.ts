@@ -158,7 +158,7 @@ const PROJECT = 'https://compute.googleapis.com/compute/v1/projects/',
 				set_status({ project, name, zone, token, status }),
 			startup_script = [
 				'apt-get update && apt-get install -y jq',
-				..._set_status('upgrading'),
+				..._set_status('installing'),
 				'apt-get update && apt-get upgrade -y && apt-get autoremove -y',
 				..._set_status('cloning'),
 				'apt-get install -y git',

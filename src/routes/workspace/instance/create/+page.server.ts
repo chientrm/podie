@@ -1,14 +1,18 @@
 import routes from '$lib/constants/routes';
+import { list_repoes } from '$lib/helpers/github';
 import { redirect } from '@sveltejs/kit';
-import type { PageServerLoad } from './$types';
+import type { Action, PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ parent }) => {
-	const { repoes, regions } = await parent(),
-		repo = repoes[0].full_name,
-		region = Object.keys(regions)[0],
-		zone = regions[region][0];
+export const load: PageServerLoad = ({ locals }) =>
+	list_repoes(locals.user!.gh!.access_token)
+		.then((repoes) => repoes.map(({ full_name }) => ({ full_name })))
+		.then((repoes) => ({ repoes }));
+
+export const POST: Action = async ({ request }) => {
+	const formData = await request.formData(),
+		full_name = formData.get('full_name')! as string;
 	throw redirect(
 		302,
-		routes.WORKSPACE.INSTANCES.CREATE.REPO(repo).REGION(region).ZONE(zone)
+		routes.WORKSPACE.INSTANCES.CREATE.FULL_NAME(full_name).GET
 	);
 };

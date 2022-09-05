@@ -76,5 +76,6 @@ export default {
 	CREATE: 'Create',
 	STATUS: 'Status',
 	UPDATE: 'Update',
-	CHANGE_MACHINE_TYPE: 'Change machine type'
+	CHANGE_MACHINE_TYPE: 'Change machine type',
+	NEXT: 'Next'
 };

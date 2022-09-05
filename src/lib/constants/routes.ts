@@ -25,6 +25,13 @@ export default {
 						ZONE: (zone: string) =>
 							`/workspace/instance/create/${repo}/${region}/${zone}`
 					})
+				}),
+				FULL_NAME: (full_name: string) => ({
+					GET: `/workspace/instance/create/${full_name}`,
+					REGION: (region: string) => ({
+						ZONE: (zone: string) =>
+							`/workspace/instance/create/${full_name}/${region}/${zone}`
+					})
 				})
 			},
 			TEMRINATE: {
