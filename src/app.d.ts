@@ -27,6 +27,7 @@ declare namespace Podie {
 		org: string;
 		repo_name: string;
 		branch: string;
+		region: string;
 		zone: string;
 		disk_size: number;
 		machine_type: string;

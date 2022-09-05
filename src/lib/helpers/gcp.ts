@@ -15,18 +15,19 @@ const PROJECT = 'https://compute.googleapis.com/compute/v1/projects/',
 			.setIssuedAt()
 			.setIssuer(client_email)
 			.setAudience(token_uri)
-			.setExpirationTime('5s')
+			.setExpirationTime('5m')
 			.sign(await for_key),
 	grant_type = 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-	get_auth = async () =>
+	get_access_token = async () =>
 		fetch(token_uri, {
 			method: 'post',
 			headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
 			body: new URLSearchParams({ grant_type, assertion: await get_jwt() })
 		})
 			.then((res) => res.json<{ access_token: string }>())
-			.then((data) => data.access_token as string)
-			.then((token) => ({ Authorization: 'Bearer ' + token })),
+			.then((data) => data.access_token as string),
+	create_auth = (token: string) => ({ Authorization: 'Bearer ' + token }),
+	get_auth = () => get_access_token().then(create_auth),
 	f = async (url: string, method: string = 'GET') =>
 		fetch(url, { method, headers: await get_auth() }).then(check_ok),
 	extract_zone = (zone: string) => zone.split('/zones/').pop()!,
@@ -44,6 +45,7 @@ const PROJECT = 'https://compute.googleapis.com/compute/v1/projects/',
 								zone: string;
 								selfLink: string;
 								status: string;
+								metadata: { items: { key: string; value: string }[] };
 								networkInterfaces: {
 									accessConfigs: { name: string; natIP: string }[];
 								}[];
@@ -104,12 +106,28 @@ const PROJECT = 'https://compute.googleapis.com/compute/v1/projects/',
 			diskSizeGb: disk_size,
 			sourceImage:
 				source_image ??
-				'projects/cos-cloud/global/images/cos-stable-97-16919-103-33',
+				'projects/ubuntu-os-cloud/global/images/ubuntu-minimal-2204-jammy-v20220902',
 			diskType: `zones/${zone}/diskTypes/pd-ssd`
 		},
 		autoDelete: true,
 		boot: true
 	}),
+	set_status = ({
+		project,
+		name,
+		token,
+		zone,
+		status
+	}: {
+		project: string;
+		name: string;
+		token: string;
+		zone: string;
+		status: string;
+	}) => [
+		`FINGERPRINT=$(curl 'https://compute.googleapis.com/compute/v1/projects/${project}/zones/${zone}/instances/${name}' --header 'Authorization: Bearer ${token}' --header 'Accept: application/json' | jq -r .metadata.fingerprint)`,
+		`curl --request POST 'https://compute.googleapis.com/compute/v1/projects/${project}/zones/${zone}/instances/${name}/setMetadata' --header 'Authorization: Bearer ${token}' --header 'Accept: application/json' --header 'Content-Type: application/json' --data '{"fingerprint":"'"$FINGERPRINT"'","items":[{"key":"status","value":"${status}"}]}'`
+	],
 	create_instance = async ({
 		project,
 		zone,
@@ -134,10 +152,27 @@ const PROJECT = 'https://compute.googleapis.com/compute/v1/projects/',
 		source_image?: string;
 		keys: Record<string, string>;
 		gh: { access_token: string; name: string; email: string; login: string };
-	}) =>
-		fetch(routes.GCP.PROJECT(project).ZONE(zone).INSTANCES.INSERT, {
+	}) => {
+		const token = await get_access_token(),
+			_set_status = (status: string) =>
+				set_status({ project, name, zone, token, status }),
+			startup_script = [
+				'apt-get update && apt-get install -y jq',
+				..._set_status('upgrading'),
+				'apt-get update && apt-get upgrade -y && apt-get autoremove -y',
+				..._set_status('cloning'),
+				'apt-get install -y git',
+				`rm -rf /home/${gh.login}/${repo_name}`,
+				`git clone --branch ${branch} https://${gh.access_token}@github.com/${org}/${repo_name} /home/${gh.login}/${repo_name}`,
+				`sudo chown -R ${gh.login} /home/${gh.login}/${repo_name}`,
+				`echo 'cd /home/${gh.login}/${repo_name}' >> /home/${gh.login}/.bashrc`,
+				`echo 'git config --global user.name "${gh.name}"' >> /home/${gh.login}/.bashrc`,
+				`echo 'git config --global user.email "${gh.email}"' >> /home/${gh.login}/.bashrc`,
+				..._set_status('ready')
+			].join('\n');
+		return fetch(routes.GCP.PROJECT(project).ZONE(zone).INSTANCES.INSERT, {
 			method: 'POST',
-			headers: await get_auth(),
+			headers: create_auth(token),
 			body: JSON.stringify({
 				name,
 				machineType: `zones/${zone}/machineTypes/${machine_type}`,
@@ -147,15 +182,7 @@ const PROJECT = 'https://compute.googleapis.com/compute/v1/projects/',
 					items: [
 						{
 							key: 'startup-script',
-							value: [
-								`rm -rf /home/${gh.login}/${repo_name}`,
-								`git clone --branch ${branch} https://${gh.access_token}@github.com/${org}/${repo_name} /home/${gh.login}/${repo_name}`,
-								`sudo chown -R ${gh.login} /home/${gh.login}/${repo_name}`,
-								"echo 'PubkeyAuthentication yes' >> /etc/ssh/sshd_config",
-								`echo 'cd /home/${gh.login}/${repo_name}' >> /home/${gh.login}/.bashrc`,
-								`echo 'git config --global user.name "${gh.name}"' >> /home/${gh.login}/.bashrc`,
-								`echo 'git config --global user.email "${gh.email}"' >> /home/${gh.login}/.bashrc`
-							].join('\n')
+							value: startup_script
 						},
 						{
 							key: 'ssh-keys',
@@ -164,7 +191,8 @@ const PROJECT = 'https://compute.googleapis.com/compute/v1/projects/',
 					]
 				}
 			})
-		}).then(check_ok),
+		}).then(check_ok);
+	},
 	extract_region = (zone: string) => zone.split('-').slice(0, -1).join('-'),
 	create_image = async ({
 		project,

@@ -12,8 +12,7 @@ export default {
 	WORKSPACES: 'Workspaces',
 	UNDER_CONSTRUCTION: '...under contruction...',
 	TITLE: 'Remote dev | Podie',
-	DESCRIPTION:
-		'You add Podie to your Cloud, select repository, create instance and "ssh root@<ip-address>" 👍.',
+	DESCRIPTION: 'Remote dev environment without containerize overhead 👍.',
 	KEYWORDS: [
 		'Remote',
 		'Development',

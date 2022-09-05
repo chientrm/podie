@@ -1,37 +1,39 @@
 <script lang="ts">
 	import { invalidateAll } from '$app/navigation';
 	import ExternalAnchor from '$lib/components/ExternalAnchor.svelte';
+	import region_cities from '$lib/constants/region_cities';
 	import routes from '$lib/constants/routes';
 	import strings from '$lib/constants/strings';
-	import Refresh from 'svelte-material-icons/Refresh.svelte';
+	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import type { PageServerData } from './$types';
 	export let data: PageServerData;
 	let refreshing = false;
-	const refresh = async () => {
-		refreshing = true;
-		await invalidateAll();
-		refreshing = false;
-	};
+	onMount(() => {
+		const interval = setInterval(() => {
+			if (!document.hidden) {
+				invalidateAll();
+			}
+		}, 2000);
+		return () => clearInterval(interval);
+	});
 </script>
 
 <p>Terminated instances causing no extra cost</p>
-
-<button on:click={refresh}>{strings.REFRESH} <Refresh /></button>
 
 {#if !refreshing}
 	<table in:fade>
 		<thead>
 			<td>{strings.NAME}</td>
 			<td>{strings.REPO}</td>
-			<td>{strings.ZONE}</td>
+			<td>{strings.REGION}</td>
 			<td>{strings.MACHINE_TYPE}</td>
 			<td>{strings.DISK_SIZE}</td>
-			<td>{strings.ADDRESS}</td>
+			<td>{strings.STATUS}</td>
 			<td>{strings.ACTION}</td>
 		</thead>
 		<tbody>
-			{#each Object.entries(data.podie_instances) as [name, { repo_name, org, branch, zone, machine_type, disk_size }]}
+			{#each Object.entries(data.podie_instances) as [name, { repo_name, org, branch, region, zone, machine_type, disk_size }]}
 				<tr>
 					<td>{name}</td>
 					<td>
@@ -42,13 +44,17 @@
 							{org}/{repo_name} ({branch})
 						</ExternalAnchor>
 					</td>
-					<td>{zone}</td>
+					<td>{region_cities[region] ?? region}</td>
 					<td>{machine_type}</td>
 					<td>{disk_size}</td>
 					<td>
 						{#if data.gcp_instances[name]}
 							{#if data.gcp_instances[name].status === 'RUNNING'}
-								{data.gcp_instances[name].natIP}
+								{#if data.gcp_instances[name].meta_status === 'ready'}
+									{data.gcp_instances[name].natIP}
+								{:else}
+									{data.gcp_instances[name].meta_status ?? 'boosting'}
+								{/if}
 							{:else}
 								{data.gcp_instances[name].status}
 							{/if}
