@@ -28,13 +28,21 @@ export const POST: Action = async ({ request, params, locals }) => {
 			disk_size: parseInt(formData.get('disk_size')! as string),
 			machine_type: formData.get('machine_type')! as string
 		})),
-		{ org, name: repo_name, zone } = params,
+		{ org, name: repo_name, region, zone } = params,
 		key = podie.USER.GH(locals.user!.gh!.id).KEY,
 		for_keys = get_ssh_keys(locals.PODIE, key),
 		for_instances = get_instances(locals.PODIE, key),
 		for_create_podie_instance = Promise.all([for_instances, for_form])
 			.then(([ins, { name, branch, disk_size, machine_type }]) => {
-				ins[name] = { org, repo_name, branch, zone, disk_size, machine_type };
+				ins[name] = {
+					org,
+					repo_name,
+					branch,
+					region,
+					zone,
+					disk_size,
+					machine_type
+				};
 				return ins;
 			})
 			.then((ins) => put_instances(locals.PODIE, key, ins)),

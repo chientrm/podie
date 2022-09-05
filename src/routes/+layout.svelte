@@ -19,48 +19,66 @@
 	const gsiteVerification = 'gG8WXVPtqVVAJlnJb5v0LlC0-HBSCVSWsVqa7KHwTPA';
 
 	afterUpdate(() => {
-		const submit = async (e: SubmitEvent) => {
+		const evaluate = (exp: string, node: HTMLElement) => {
+				const result_type = XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,
+					result = document.evaluate(exp, node, null, result_type);
+				const nodes: Node[] = [];
+				for (let i = 0; i < result.snapshotLength; ++i) {
+					nodes.push(result.snapshotItem(i)!);
+				}
+				return nodes;
+			},
+			submit = async (e: SubmitEvent) => {
 				e.preventDefault();
 				const form = e.target! as HTMLFormElement,
 					formData = new FormData(form),
-					inputs = document.evaluate(
+					inputs = evaluate(
 						"//input[@type='submit']",
-						form,
-						null,
-						XPathResult.ORDERED_NODE_SNAPSHOT_TYPE
-					);
-				for (let i = 0; i < inputs.snapshotLength; ++i) {
-					const input = inputs.snapshotItem(i)! as HTMLInputElement;
+						form
+					) as HTMLInputElement[];
+				inputs.forEach((input) => {
 					input.alt = input.value;
 					input.value = strings.SUBMITING;
 					input.disabled = true;
-				}
-				const res = await fetch(form.action, {
-					method: 'POST',
-					body: formData
-				}).then(check_ok);
-				if (res.url) {
-					await goto(res.url).finally(invalidateAll);
-				}
-				for (let i = 0; i < inputs.snapshotLength; ++i) {
-					const input = inputs.snapshotItem(i)! as HTMLInputElement;
+				});
+				await fetch(form.action, { method: 'POST', body: formData }).then(
+					async (res) => {
+						if (res.url) {
+							await goto(res.url);
+						} else {
+							invalidateAll();
+						}
+					}
+				);
+				inputs.forEach((input) => {
 					input.value = input.alt;
 					input.disabled = false;
-				}
+				});
 			},
-			text = document.createTextNode(strings.SUBMITING),
 			click = async (e: MouseEvent) => {
 				e.preventDefault();
-				const a = e.target as HTMLAnchorElement;
-				a.replaceWith(text);
-				await fetch(a.href).then(check_ok).finally(invalidateAll);
+				const a = e.target as HTMLAnchorElement,
+					href = a.href,
+					anchors = evaluate(
+						"//a[contains(@href,'delete') or contains(@href,'terminate') or contains(@href,'start')]",
+						document.body
+					) as HTMLAnchorElement[];
+				anchors.forEach((anchor) => {
+					anchor.innerText = strings.SUBMITING;
+					anchor.href = '#';
+				});
+				await fetch(href);
 			};
 		for (const form of document.getElementsByTagName('form')) {
 			form.onsubmit = submit;
 		}
 		for (const e of document.getElementsByTagName('a')) {
 			const a = e as HTMLAnchorElement;
-			if (a.href.includes('delete')) {
+			if (
+				a.href.includes('delete') ||
+				a.href.includes('start') ||
+				a.href.includes('terminate')
+			) {
 				a.onclick = click;
 			}
 		}

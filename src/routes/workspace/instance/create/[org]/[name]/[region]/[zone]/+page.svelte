@@ -7,14 +7,6 @@
 
 <form method="POST">
 	<label>
-		<span>{strings.BRANCH}</span>
-		<select name="branch">
-			{#each data.branches as branch}
-				<option value={branch.name}>{branch.name}</option>
-			{/each}
-		</select>
-	</label>
-	<label>
 		<span>{strings.NAME}</span>
 		<input
 			type="text"
@@ -23,6 +15,14 @@
 			title={patterns.NAME}
 			required
 		/>
+	</label>
+	<label>
+		<span>{strings.BRANCH}</span>
+		<select name="branch">
+			{#each data.branches as branch}
+				<option value={branch.name}>{branch.name}</option>
+			{/each}
+		</select>
 	</label>
 	<label>
 		<span>{strings.DISK_SIZE}</span>

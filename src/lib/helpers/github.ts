@@ -33,9 +33,9 @@ const headers = {
 			.then((res) => res.json<{ email: string }[]>())
 			.then((res) => res[0].email),
 	list_repoes = (access_token: string) =>
-		f(routes.GITHUB.REPOS, access_token)
-			.then((res) => res.json<{ full_name: string }[]>())
-			.then((res) => res.map(({ full_name }) => ({ full_name }))),
+		f(routes.GITHUB.REPOS, access_token).then((res) =>
+			res.json<{ full_name: string }[]>()
+		),
 	list_branches = ({
 		access_token,
 		org,

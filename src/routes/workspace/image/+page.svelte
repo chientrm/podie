@@ -2,41 +2,40 @@
 	import { invalidateAll } from '$app/navigation';
 	import routes from '$lib/constants/routes';
 	import strings from '$lib/constants/strings';
-	import type { PageServerData } from './$types';
-	import Refresh from 'svelte-material-icons/Refresh.svelte';
+	import { clearAsyncInterval, setAsyncInterval } from '$lib/utils';
+	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
+	import type { PageServerData } from './$types';
 	export let data: PageServerData;
-	let refreshing = false;
-	const refresh = async () => {
-		refreshing = true;
-		await invalidateAll();
-		refreshing = false;
-	};
+	onMount(() => {
+		const interval = setAsyncInterval(async () => {
+			if (!document.hidden) {
+				await invalidateAll();
+			}
+		}, 2000);
+		return () => clearAsyncInterval(interval);
+	});
 </script>
 
-<button on:click={refresh}>{strings.REFRESH} <Refresh /></button>
-
-{#if !refreshing}
-	<table in:fade>
-		<thead>
-			<td>{strings.NAME}</td>
-			<td>{strings.STATUS}</td>
-			<td>{strings.DISK_SIZE}</td>
-			<td>{strings.REGION}</td>
-			<td>{strings.ACTION}</td>
-		</thead>
-		<tbody>
-			{#each data.images as { name, status, diskSizeGb, region }}
-				<tr>
-					<td>{name}</td>
-					<td>{status}</td>
-					<td>{diskSizeGb}</td>
-					<td>{region}</td>
-					<td>
-						<a href={routes.WORKSPACE.IMAGE(name).DELETE}>{strings.DELETE}</a>
-					</td>
-				</tr>
-			{/each}
-		</tbody>
-	</table>
-{/if}
+<table in:fade>
+	<thead>
+		<td>{strings.NAME}</td>
+		<td>{strings.STATUS}</td>
+		<td>{strings.DISK_SIZE}</td>
+		<td>{strings.REGION}</td>
+		<td>{strings.ACTION}</td>
+	</thead>
+	<tbody>
+		{#each data.images as { name, status, diskSizeGb, region }}
+			<tr>
+				<td>{name}</td>
+				<td>{status}</td>
+				<td>{diskSizeGb}</td>
+				<td>{region}</td>
+				<td>
+					<a href={routes.WORKSPACE.IMAGE(name).DELETE}>{strings.DELETE}</a>
+				</td>
+			</tr>
+		{/each}
+	</tbody>
+</table>
