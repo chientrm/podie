@@ -21,7 +21,7 @@ const headers = {
 	get_user = (access_token: string) =>
 		f(routes.GITHUB.USER, access_token).then((res) =>
 			res.json<{
-				id: number; 
+				id: number;
 				login: string;
 				html_url: string;
 				email: string;
@@ -38,12 +38,14 @@ const headers = {
 			.then((res) => res.map(({ full_name }) => ({ full_name }))),
 	list_branches = ({
 		access_token,
-		repo
+		org,
+		repo_name
 	}: {
 		access_token: string;
-		repo: string;
+		org: string;
+		repo_name: string;
 	}) =>
-		f(routes.GITHUB.REPO(repo).BRANCHES.LIST, access_token)
+		f(routes.GITHUB.ORG(org).REPO(repo_name).BRANCHES.LIST, access_token)
 			.then((res) => res.json<{ name: string }[]>())
 			.then((res) => res.map(({ name }) => ({ name })));
 

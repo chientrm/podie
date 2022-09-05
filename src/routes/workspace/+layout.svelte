@@ -9,6 +9,9 @@
 		<Anchor href={routes.WORKSPACE.INSTANCES.LIST}>{strings.INSTANCES}</Anchor>
 	</h3>
 	<h3>
+		<Anchor href={routes.WORKSPACE.IMAGES.LIST}>{strings.IMAGES}</Anchor>
+	</h3>
+	<h3>
 		<Anchor href={routes.WORKSPACE.SSH_KEYS.LIST}>{strings.SSH_KEYS}</Anchor>
 	</h3>
 	<h3>

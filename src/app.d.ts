@@ -24,12 +24,12 @@ declare namespace App {
 declare namespace Podie {
 	type SshKeys = Record<string, string>;
 	interface Instance {
-		repo: string;
+		org: string;
+		repo_name: string;
 		branch: string;
 		zone: string;
-		diskSize: number;
-		startup: string;
-		machineType: string;
+		disk_size: number;
+		machine_type: string;
 	}
 	type Instances = Record<string, Instance>;
 	interface Profile {
