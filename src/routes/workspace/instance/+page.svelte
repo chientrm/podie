@@ -31,21 +31,20 @@
 			<td>{strings.ACTION}</td>
 		</thead>
 		<tbody>
-			{#each Object.entries(data.podie_instances) as [name, instance]}
+			{#each Object.entries(data.podie_instances) as [name, { repo_name, org, branch, zone, machine_type, disk_size }]}
 				<tr>
 					<td>{name}</td>
 					<td>
 						<ExternalAnchor
-							href={routes.GITHUB.ORG(instance.org).REPO(instance.repo_name)
-								.VIEW}
+							href={routes.GITHUB.ORG(org).REPO(repo_name).VIEW}
 							target="_blank"
 						>
-							{instance.org}/{instance.repo_name} ({instance.branch})
+							{org}/{repo_name} ({branch})
 						</ExternalAnchor>
 					</td>
-					<td>{instance.zone}</td>
-					<td>{instance.machine_type}</td>
-					<td>{instance.disk_size}</td>
+					<td>{zone}</td>
+					<td>{machine_type}</td>
+					<td>{disk_size}</td>
 					<td>
 						{#if data.gcp_instances[name]}
 							{#if data.gcp_instances[name].status === 'RUNNING'}
@@ -69,22 +68,24 @@
 								</a>
 							{/if}
 						{:else}
-							<a href={routes.WORKSPACE.INSTANCES.START(name)}>
-								{strings.START}
-							</a>
-							{#if data.gcp_images.has(name)}
-								<a href={routes.WORKSPACE.INSTANCES.START_FROM_IMAGE(name)}>
-									{strings.START_FROM_IMAGE}
+							<div>
+								<a href={routes.WORKSPACE.INSTANCES.START(name)}>
+									{strings.START}
 								</a>
-							{/if}
-							{#if !data.gcp_instances[name]}
-								<a href={routes.WORKSPACE.INSTANCE(name).ZONE(instance.zone).EDIT}>
-									{strings.CHANGE_MACHINE_TYPE}
+								{#if data.gcp_images.has(name)}
+									<a href={routes.WORKSPACE.INSTANCES.START_FROM_IMAGE(name)}>
+										{strings.START_FROM_IMAGE}
+									</a>
+								{/if}
+								{#if !data.gcp_instances[name]}
+									<a href={routes.WORKSPACE.INSTANCE(name).ZONE(zone).EDIT}>
+										{strings.CHANGE_MACHINE_TYPE}
+									</a>
+								{/if}
+								<a href={routes.WORKSPACE.INSTANCES.DELETE(name)}>
+									{strings.DELETE}
 								</a>
-							{/if}
-							<a href={routes.WORKSPACE.INSTANCES.DELETE(name)}>
-								{strings.DELETE}
-							</a>
+							</div>
 						{/if}
 					</td>
 				</tr>
@@ -92,3 +93,11 @@
 		</tbody>
 	</table>
 {/if}
+
+<style>
+	div {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5em;
+	}
+</style>

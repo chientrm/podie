@@ -5,16 +5,13 @@
 </script>
 
 <form method="POST">
-	<label>
-		<span>{strings.NAME}</span>
-		<input type="text" name="name" value={data.name} />
-	</label>
+	<span>{strings.INSTANCE}: {data.name}</span>
 	<label>
 		<span>{strings.MACHINE_TYPE}</span>
 		<select name="machine_type" value={data.machine_type}>
-			{#each data.machine_types as machine_type}
-				<option value={machine_type.name}>
-					{machine_type.name} ({machine_type.description})
+			{#each data.machine_types as { name, description }}
+				<option value={name}>
+					{name} ({description})
 				</option>
 			{/each}
 		</select>

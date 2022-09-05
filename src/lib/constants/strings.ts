@@ -23,6 +23,7 @@ export default {
 		'Container',
 		'Azure'
 	],
+	INSTANCE: 'Instance',
 	OOPS: 'Oops. Something went wrong!',
 	CONNECT_GCP: 'Connect GCP',
 	REPOES: 'Repoes',

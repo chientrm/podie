@@ -40,7 +40,7 @@
 					body: formData
 				}).then(check_ok);
 				if (res.url) {
-					await goto(res.url).then(invalidateAll);
+					await goto(res.url).finally(invalidateAll);
 				}
 				for (let i = 0; i < inputs.snapshotLength; ++i) {
 					const input = inputs.snapshotItem(i)! as HTMLInputElement;
@@ -53,7 +53,7 @@
 				e.preventDefault();
 				const a = e.target as HTMLAnchorElement;
 				a.replaceWith(text);
-				await fetch(a.href).then(check_ok).then(invalidateAll);
+				await fetch(a.href).then(check_ok).finally(invalidateAll);
 			};
 		for (const form of document.getElementsByTagName('form')) {
 			form.onsubmit = submit;

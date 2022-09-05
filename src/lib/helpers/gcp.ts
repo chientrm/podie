@@ -165,28 +165,32 @@ const PROJECT = 'https://compute.googleapis.com/compute/v1/projects/',
 				}
 			})
 		}).then(check_ok),
+	extract_region = (zone: string) => zone.split('-').slice(0, -1).join('-'),
 	create_image = async ({
 		project,
 		name,
-		region,
-		instance_name,
-		instance_zone
+		zone
 	}: {
 		project: string;
 		name: string;
-		region: string;
-		instance_name: string;
-		instance_zone: string;
+		zone: string;
 	}) =>
 		fetch(routes.GCP.PROJECT(project).IMAGES.CREATE, {
 			method: 'POST',
 			headers: await get_auth(),
 			body: JSON.stringify({
 				name,
-				sourceDisk: `projects/${project}/zones/${instance_zone}/disks/${instance_name}`,
-				storageLocations: [region]
+				sourceDisk: `projects/${project}/zones/${zone}/disks/${name}`,
+				storageLocations: [extract_region(zone)]
 			})
 		}).then(check_ok),
+	delete_image = ({
+		project,
+		resourceId
+	}: {
+		project: string;
+		resourceId: string;
+	}) => f(routes.GCP.PROJECT(project).IMAGE(resourceId).DELETE, 'DELETE'),
 	list_images = ({ project }: { project: string }) =>
 		f(routes.GCP.PROJECT(project).IMAGES.LIST).then((res) =>
 			res.json<{
@@ -194,7 +198,7 @@ const PROJECT = 'https://compute.googleapis.com/compute/v1/projects/',
 					name: string;
 					status: string;
 					diskSizeGb: number;
-					storageLocations: string[];
+					storageLocations?: string[];
 				}[];
 			}>()
 		);
@@ -206,5 +210,6 @@ export {
 	list_regions,
 	list_machine_types,
 	create_image,
-	list_images
+	list_images,
+	delete_image
 };

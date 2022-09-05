@@ -10,7 +10,7 @@ export const load: PageServerLoad = ({ locals }) =>
 					name,
 					status,
 					diskSizeGb,
-					region: storageLocations[0]
+					region: storageLocations ? storageLocations[0] : ''
 				})) ?? []
 		)
 		.then((images) => ({ images }));

@@ -39,12 +39,6 @@ export default {
 			DELETE: (name: string) => `/workspace/instance/delete/${name}`
 		},
 		INSTANCE: (name: string) => ({
-			EDIT: `/workspace/instance/edit/${name}`,
-			REGION: (region: string) => ({
-				ZONE: (zone: string) => ({
-					EDIT: `/workspace/instance/edit/${name}/${region}/${zone}`
-				})
-			}),
 			ZONE: (zone: string) => ({
 				EDIT: `/workspace/instance/edit/${name}/${zone}`
 			})
@@ -55,6 +49,9 @@ export default {
 			},
 			LIST: '/workspace/image'
 		},
+		IMAGE: (name: string) => ({
+			DELETE: `/workspace/image/delete/${name}`
+		}),
 		SSH_KEYS: {
 			LIST: '/workspace/ssh_key',
 			ADD: '/workspace/ssh_key/add'
@@ -134,7 +131,10 @@ export default {
 			},
 			REGIONS: {
 				LIST: `https://compute.googleapis.com/compute/v1/projects/${project}/regions`
-			}
+			},
+			IMAGE: (resourceId: string) => ({
+				DELETE: `https://compute.googleapis.com/compute/beta/projects/${project}/global/images/${resourceId}`
+			})
 		})
 	},
 	PRIVACY_POLICY: '/privacy_policy',
