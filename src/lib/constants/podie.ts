@@ -4,7 +4,7 @@ export default {
 			GCP: {
 				PID: `podiegh${id}`
 			},
-			KEY: `gh-{id}`
+			KEY: `gh-${id}`
 		})
 	}
 };
