@@ -77,6 +77,15 @@
 									>
 										{strings.CONNECT}
 									</a>
+									<a
+										href={routes.VSCODE({
+											ip: data.gcp_instances[name].natIP,
+											login: data.login,
+											repo_name
+										})}
+									>
+										{strings.OPEN_IN_VSCODE}
+									</a>
 								{/if}
 							</div>
 						{/if}

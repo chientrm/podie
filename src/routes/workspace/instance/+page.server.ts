@@ -31,6 +31,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 			])
 		),
 		gcp_images: new Set(gcp_images.items?.map((i) => i.name)),
+		login: locals.user!.gh!.login,
 		podie_instances
 	}));
 };
