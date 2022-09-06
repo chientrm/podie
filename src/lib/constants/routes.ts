@@ -72,6 +72,16 @@ export default {
 			GCP: '/workspace/integrations/gcp'
 		}
 	},
+	VSCODE: ({
+		ip,
+		login,
+		repo_name
+	}: {
+		ip: string;
+		login: string;
+		repo_name: string;
+	}) =>
+		`vscode://vscode-remote/ssh-remote+${login}@${ip}/home/${login}/${repo_name}`,
 	LET_US_KNOW: '/letusknow',
 	THANK: (email: string) => ({
 		GET: `/thank/${email}`

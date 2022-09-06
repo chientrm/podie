@@ -57,6 +57,7 @@ export default {
 	TERMS_AND_CONDITIONS: 'Terms and Conditions',
 	TERMINATE: 'Terminate',
 	CONNECT: 'Connect',
+	OPEN_IN_VSCODE: 'Open in VSCode',
 	MACHINES: 'Machines',
 	TERMINATED: 'Terminated',
 	ACTION: 'Action',
