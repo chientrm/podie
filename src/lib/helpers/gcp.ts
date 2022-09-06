@@ -105,7 +105,7 @@ const scopes = [
 			diskSizeGb: disk_size,
 			sourceImage:
 				source_image ??
-				'projects/ubuntu-os-cloud/global/images/ubuntu-minimal-2204-jammy-v20220902',
+				'projects/ubuntu-os-cloud/global/images/ubuntu-2204-jammy-v20220902',
 			diskType: `zones/${zone}/diskTypes/pd-ssd`
 		},
 		autoDelete: true,
@@ -156,19 +156,17 @@ const scopes = [
 			_set_status = (status: string) =>
 				set_status({ project, name, zone, token, status }),
 			startup_script = [
-				'apt-get update && apt-get install -y jq',
+				'apt-get install -y jq',
 				..._set_status('installing'),
-				'apt-get install -y git neovim',
 				'wget https://github.com/tsl0922/ttyd/releases/download/1.7.1/ttyd.x86_64',
 				'mv ttyd.x86_64 /usr/local//bin/ttyd',
 				'chmod +x /usr/local/bin/ttyd',
 				..._set_status('cloning'),
 				`rm -rf /home/${gh.login}/${repo_name}`,
-				`git clone --branch ${branch} https://${gh.access_token}@github.com/${org}/${repo_name} /home/${gh.login}/${repo_name}`,
-				`sudo chown -R ${gh.login} /home/${gh.login}/${repo_name}`,
-				`echo 'cd /home/${gh.login}/${repo_name}' >> /home/${gh.login}/.bashrc`,
+				`sudo -u chientrm bash -c "git clone --branch ${branch} https://${gh.access_token}@github.com/${org}/${repo_name} /home/${gh.login}/${repo_name}"`,
 				`echo 'git config --global user.name "${gh.name}"' >> /home/${gh.login}/.bashrc`,
 				`echo 'git config --global user.email "${gh.email}"' >> /home/${gh.login}/.bashrc`,
+				`echo 'cd /home/${gh.login}/${repo_name}' >> /home/${gh.login}/.bashrc`,
 				..._set_status('ready'),
 				`sudo -u chientrm bash -c "/usr/local/bin/ttyd bash"`
 			].join('\n');
