@@ -26,7 +26,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 					status,
 					natIP: networkInterfaces[0].accessConfigs[0].natIP,
 					zone,
-					meta_status: labels['status']
+					meta_status: labels ? labels['status'] : undefined
 				}
 			])
 		),
