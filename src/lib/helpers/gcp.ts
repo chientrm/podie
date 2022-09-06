@@ -229,6 +229,7 @@ const scopes = [
 					status: string;
 					diskSizeGb: number;
 					storageLocations?: string[];
+					archiveSizeBytes: number;
 				}[];
 			}>()
 		),
