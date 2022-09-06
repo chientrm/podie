@@ -43,7 +43,8 @@ export default {
 			START: (name: string) => `/workspace/instance/start/${name}`,
 			START_FROM_IMAGE: (name: string) =>
 				`/workspace/instance/start_from_image/${name}`,
-			DELETE: (name: string) => `/workspace/instance/delete/${name}`
+			DELETE: (name: string) => `/workspace/instance/delete/${name}`,
+			CONNECT: (ip: string) => `http://${ip}:7681`
 		},
 		INSTANCE: (name: string) => ({
 			ZONE: (zone: string) => ({
@@ -141,6 +142,9 @@ export default {
 			},
 			IMAGE: (resourceId: string) => ({
 				DELETE: `https://compute.googleapis.com/compute/beta/projects/${project}/global/images/${resourceId}`
+			}),
+			FIREWALL: (firewall: string) => ({
+				PATCH: `https://compute.googleapis.com/compute/v1/projects/${project}/global/firewalls/${firewall}`
 			})
 		})
 	},

@@ -5,7 +5,6 @@
 </script>
 
 <p>{strings.DESCRIPTION}</p>
-<p>Make sure to add your public SSH key 🤦‍♂️</p>
 <p>Be careful not to accidentially create a super compute instance 🤑🤑🤑</p>
 <p>Podie is open source and non-profit 🎉🎉🎉.</p>
 <p>Anyway, Podie is currently in beta testing 🥺🥺🥺</p>

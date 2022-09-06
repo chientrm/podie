@@ -33,7 +33,9 @@
 				<td>{diskSizeGb}</td>
 				<td>{region}</td>
 				<td>
-					<a href={routes.WORKSPACE.IMAGE(name).DELETE}>{strings.DELETE}</a>
+					{#if status === 'READY'}
+						<a href={routes.WORKSPACE.IMAGE(name).DELETE}>{strings.DELETE}</a>
+					{/if}
 				</td>
 			</tr>
 		{/each}

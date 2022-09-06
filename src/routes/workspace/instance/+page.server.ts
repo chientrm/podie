@@ -20,17 +20,15 @@ export const load: PageServerLoad = async ({ locals }) => {
 		get_instances(locals.PODIE, podie.USER.GH(ghid).KEY)
 	]).then(([[gcp_instances, gcp_images], podie_instances]) => ({
 		gcp_instances: Object.fromEntries(
-			gcp_instances.map(
-				({ name, status, networkInterfaces, zone, metadata }) => [
-					name,
-					{
-						status,
-						natIP: networkInterfaces[0].accessConfigs[0].natIP,
-						zone,
-						meta_status: metadata.items.find((i) => i.key === 'status')?.value
-					}
-				]
-			)
+			gcp_instances.map(({ name, status, networkInterfaces, zone, labels }) => [
+				name,
+				{
+					status,
+					natIP: networkInterfaces[0].accessConfigs[0].natIP,
+					zone,
+					meta_status: labels['status']
+				}
+			])
 		),
 		gcp_images: new Set(gcp_images.items?.map((i) => i.name)),
 		podie_instances

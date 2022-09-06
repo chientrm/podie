@@ -3,8 +3,7 @@ import { check_ok } from '$lib/utils';
 import { importPKCS8, SignJWT } from 'jose';
 import { client_email, private_key, token_uri } from '$lib/configs/gcp.json';
 
-const PROJECT = 'https://compute.googleapis.com/compute/v1/projects/',
-	scopes = [
+const scopes = [
 		'https://www.googleapis.com/auth/compute',
 		'https://www.googleapis.com/auth/cloud-platform'
 	],
@@ -45,7 +44,7 @@ const PROJECT = 'https://compute.googleapis.com/compute/v1/projects/',
 								zone: string;
 								selfLink: string;
 								status: string;
-								metadata: { items: { key: string; value: string }[] };
+								labels: Record<string, string>;
 								networkInterfaces: {
 									accessConfigs: { name: string; natIP: string }[];
 								}[];
@@ -125,8 +124,8 @@ const PROJECT = 'https://compute.googleapis.com/compute/v1/projects/',
 		zone: string;
 		status: string;
 	}) => [
-		`FINGERPRINT=$(curl 'https://compute.googleapis.com/compute/v1/projects/${project}/zones/${zone}/instances/${name}' --header 'Authorization: Bearer ${token}' --header 'Accept: application/json' | jq -r .metadata.fingerprint)`,
-		`curl --request POST 'https://compute.googleapis.com/compute/v1/projects/${project}/zones/${zone}/instances/${name}/setMetadata' --header 'Authorization: Bearer ${token}' --header 'Accept: application/json' --header 'Content-Type: application/json' --data '{"fingerprint":"'"$FINGERPRINT"'","items":[{"key":"status","value":"${status}"}]}'`
+		`FINGERPRINT=$(curl 'https://compute.googleapis.com/compute/v1/projects/${project}/zones/${zone}/instances/${name}' --header 'Authorization: Bearer ${token}' --header 'Accept: application/json' | jq -r .labelFingerprint)`,
+		`curl --request POST 'https://compute.googleapis.com/compute/v1/projects/${project}/zones/${zone}/instances/${name}/setLabels' --header 'Authorization: Bearer ${token}' --header 'Accept: application/json' --header 'Content-Type: application/json' --data '{"labelFingerprint":"'"$FINGERPRINT"'","labels":{"status":"${status}"}}'`
 	],
 	create_instance = async ({
 		project,
@@ -159,16 +158,19 @@ const PROJECT = 'https://compute.googleapis.com/compute/v1/projects/',
 			startup_script = [
 				'apt-get update && apt-get install -y jq',
 				..._set_status('installing'),
-				'apt-get update && apt-get upgrade -y && apt-get autoremove -y',
+				'apt-get install -y git neovim',
+				'wget https://github.com/tsl0922/ttyd/releases/download/1.7.1/ttyd.x86_64',
+				'mv ttyd.x86_64 /usr/local//bin/ttyd',
 				..._set_status('cloning'),
-				'apt-get install -y git',
 				`rm -rf /home/${gh.login}/${repo_name}`,
 				`git clone --branch ${branch} https://${gh.access_token}@github.com/${org}/${repo_name} /home/${gh.login}/${repo_name}`,
 				`sudo chown -R ${gh.login} /home/${gh.login}/${repo_name}`,
 				`echo 'cd /home/${gh.login}/${repo_name}' >> /home/${gh.login}/.bashrc`,
 				`echo 'git config --global user.name "${gh.name}"' >> /home/${gh.login}/.bashrc`,
 				`echo 'git config --global user.email "${gh.email}"' >> /home/${gh.login}/.bashrc`,
-				..._set_status('ready')
+				'chmod +x /usr/local/bin/ttyd',
+				..._set_status('ready'),
+				`sudo -u chientrm bash -c "/usr/local/bin/ttyd bash"`
 			].join('\n');
 		return fetch(routes.GCP.PROJECT(project).ZONE(zone).INSTANCES.INSERT, {
 			method: 'POST',
@@ -189,7 +191,9 @@ const PROJECT = 'https://compute.googleapis.com/compute/v1/projects/',
 							value: `${gh.login}:${Object.values(keys).join('\n')}`
 						}
 					]
-				}
+				},
+				labels: { status: 'boosting' },
+				tags: { items: ['http-server', 'https-server'] }
 			})
 		}).then(check_ok);
 	},
@@ -229,7 +233,17 @@ const PROJECT = 'https://compute.googleapis.com/compute/v1/projects/',
 					storageLocations?: string[];
 				}[];
 			}>()
-		);
+		),
+	INTERNAL_FIREWALL = 'default-allow-internal',
+	open_all_ports = async ({ project }: { project: string }) =>
+		fetch(routes.GCP.PROJECT(project).FIREWALL(INTERNAL_FIREWALL).PATCH, {
+			method: 'PATCH',
+			headers: await get_auth(),
+			body: JSON.stringify({
+				name: INTERNAL_FIREWALL,
+				sourceRanges: ['0.0.0.0/0']
+			})
+		}).then(check_ok);
 
 export {
 	list_instances,
@@ -239,5 +253,6 @@ export {
 	list_machine_types,
 	create_image,
 	list_images,
-	delete_image
+	delete_image,
+	open_all_ports
 };

@@ -46,7 +46,7 @@
 			<input type="submit" value="Test connection" />
 		</form>
 		{#if data.message}
-			<p>{JSON.parse(JSON.parse(data.message).text).error.message}</p>
+			{data.message}
 		{:else}
 			<p class="success">Connected</p>
 		{/if}

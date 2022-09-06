@@ -49,11 +49,7 @@
 				<td>
 					{#if data.gcp_instances[name]}
 						{#if data.gcp_instances[name].status === 'RUNNING'}
-							{#if data.gcp_instances[name].meta_status === 'ready'}
-								{data.gcp_instances[name].natIP}
-							{:else}
-								{data.gcp_instances[name].meta_status ?? 'boosting'}
-							{/if}
+							{data.gcp_instances[name].meta_status}
 						{:else}
 							{data.gcp_instances[name].status}
 						{/if}
@@ -64,13 +60,25 @@
 				<td>
 					{#if data.gcp_instances[name]}
 						{#if data.gcp_instances[name].status === 'RUNNING'}
-							<a
-								href={routes.WORKSPACE.INSTANCES.TEMRINATE.ZONE(
-									data.gcp_instances[name].zone
-								).RESOURCE_ID(name)}
-							>
-								{strings.TERMINATE}
-							</a>
+							<div>
+								<a
+									href={routes.WORKSPACE.INSTANCES.TEMRINATE.ZONE(
+										data.gcp_instances[name].zone
+									).RESOURCE_ID(name)}
+								>
+									{strings.TERMINATE}
+								</a>
+								{#if data.gcp_instances[name].meta_status === 'ready'}
+									<a
+										href={routes.WORKSPACE.INSTANCES.CONNECT(
+											data.gcp_instances[name].natIP
+										)}
+										target="_blank"
+									>
+										{strings.CONNECT}
+									</a>
+								{/if}
+							</div>
 						{/if}
 					{:else}
 						<div>
