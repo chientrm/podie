@@ -17,7 +17,7 @@ export const load: PageServerLoad = ({ locals }) =>
 						name,
 						status,
 						diskSizeGb,
-						archiveSizeGb: archiveSizeBytes / 2 ** 30,
+						archiveSizeGb: (archiveSizeBytes / 2 ** 30).toFixed(2),
 						region: storageLocations ? storageLocations[0] : ''
 					})
 				) ?? []
