@@ -4,10 +4,10 @@
 	import strings from '$lib/constants/strings';
 </script>
 
-<Anchor href={routes.WORKSPACE.INSTANCES.CREATE.GET} startsWith={true}>
-	<h4>
+<h4>
+	<Anchor href={routes.WORKSPACE.INSTANCES.CREATE.GET} startsWith={true}>
 		{strings.CREATE_INSTANCE}
-	</h4>
-</Anchor>
+	</Anchor>
+</h4>
 
 <slot />
