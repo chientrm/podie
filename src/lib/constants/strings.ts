@@ -56,6 +56,7 @@ export default {
 	PRIVACY_POLICY: 'Privacy Policy',
 	TERMS_AND_CONDITIONS: 'Terms and Conditions',
 	TERMINATE: 'Terminate',
+	CONNECT: 'Connect',
 	MACHINES: 'Machines',
 	TERMINATED: 'Terminated',
 	ACTION: 'Action',
