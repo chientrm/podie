@@ -43,6 +43,7 @@ export default {
 	MACHINE_TYPE: 'Machine type',
 	REFRESH: 'Refresh',
 	DISK_SIZE: 'Disk size (GB)',
+	ARCHIVED_SIZE: 'Archived size (GB)',
 	SSH_KEYS: 'SSH keys',
 	STARTUP: 'Startup command',
 	DOCKER_IMAGE: 'Docker image',

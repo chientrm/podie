@@ -6,11 +6,20 @@ export const load: PageServerLoad = ({ locals }) =>
 	list_images({ project: podie.USER.GH(locals.user!.gh!.id).GCP.PID })
 		.then(
 			(images) =>
-				images.items?.map(({ name, status, diskSizeGb, storageLocations }) => ({
-					name,
-					status,
-					diskSizeGb,
-					region: storageLocations ? storageLocations[0] : ''
-				})) ?? []
+				images.items?.map(
+					({
+						name,
+						status,
+						diskSizeGb,
+						archiveSizeBytes,
+						storageLocations
+					}) => ({
+						name,
+						status,
+						diskSizeGb,
+						archiveSizeGb: archiveSizeBytes / 2 ** 30,
+						region: storageLocations ? storageLocations[0] : ''
+					})
+				) ?? []
 		)
 		.then((images) => ({ images }));

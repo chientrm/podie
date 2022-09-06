@@ -22,15 +22,17 @@
 		<td>{strings.NAME}</td>
 		<td>{strings.STATUS}</td>
 		<td>{strings.DISK_SIZE}</td>
+		<td>{strings.ARCHIVED_SIZE}</td>
 		<td>{strings.REGION}</td>
 		<td>{strings.ACTION}</td>
 	</thead>
 	<tbody>
-		{#each data.images as { name, status, diskSizeGb, region }}
+		{#each data.images as { name, status, diskSizeGb, archiveSizeGb, region }}
 			<tr>
 				<td>{name}</td>
 				<td>{status}</td>
 				<td>{diskSizeGb}</td>
+				<td>{archiveSizeGb}</td>
 				<td>{region}</td>
 				<td>
 					{#if status === 'READY'}
