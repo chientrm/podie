@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { invalidateAll } from '$app/navigation';
+	import region_cities from '$lib/constants/region_cities';
 	import routes from '$lib/constants/routes';
 	import strings from '$lib/constants/strings';
 	import { clearAsyncInterval, setAsyncInterval } from '$lib/utils';
@@ -33,7 +34,7 @@
 				<td>{status}</td>
 				<td>{diskSizeGb}</td>
 				<td>{archiveSizeGb}</td>
-				<td>{region}</td>
+				<td>{region_cities[region] ?? region}</td>
 				<td>
 					{#if status === 'READY'}
 						<a href={routes.WORKSPACE.IMAGE(name).DELETE}>{strings.DELETE}</a>
