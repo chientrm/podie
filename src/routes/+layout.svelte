@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { goto, invalidateAll } from '$app/navigation';
 	import { page } from '$app/stores';
 	import Anchor from '$lib/components/Anchor.svelte';
 	import ExternalAnchor from '$lib/components/ExternalAnchor.svelte';
@@ -7,82 +6,16 @@
 	import strings from '$lib/constants/strings';
 	import logo from '$lib/images/logo.png';
 	import favicon from '$lib/images/logo.svg';
-	import { check_ok } from '$lib/utils';
 	import 'modern-normalize/modern-normalize.css';
-	import { afterUpdate } from 'svelte';
-	import GithubCircle from 'svelte-material-icons/GithubCircle.svelte';
 	import Discord from 'svelte-material-icons/Discord.svelte';
+	import GithubCircle from 'svelte-material-icons/GithubCircle.svelte';
 	import '../app.css';
 	import type { LayoutServerData } from './$types';
+	import { navigating } from '$app/stores';
+	import LoadingBar from '$lib/components/LoadingBar.svelte';
 	export let data: LayoutServerData;
 
 	const gsiteVerification = 'gG8WXVPtqVVAJlnJb5v0LlC0-HBSCVSWsVqa7KHwTPA';
-
-	afterUpdate(() => {
-		const evaluate = (exp: string, node: HTMLElement) => {
-				const result_type = XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,
-					result = document.evaluate(exp, node, null, result_type);
-				const nodes: Node[] = [];
-				for (let i = 0; i < result.snapshotLength; ++i) {
-					nodes.push(result.snapshotItem(i)!);
-				}
-				return nodes;
-			},
-			submit = async (e: SubmitEvent) => {
-				e.preventDefault();
-				const form = e.target! as HTMLFormElement,
-					formData = new FormData(form),
-					inputs = evaluate(
-						"//input[@type='submit']",
-						form
-					) as HTMLInputElement[];
-				inputs.forEach((input) => {
-					input.alt = input.value;
-					input.value = strings.SUBMITING;
-					input.disabled = true;
-				});
-				await fetch(form.action, { method: 'POST', body: formData }).then(
-					async (res) => {
-						if (res.url) {
-							await goto(res.url);
-						} else {
-							invalidateAll();
-						}
-					}
-				);
-				inputs.forEach((input) => {
-					input.value = input.alt;
-					input.disabled = false;
-				});
-			},
-			click = async (e: MouseEvent) => {
-				e.preventDefault();
-				const a = e.target as HTMLAnchorElement,
-					href = a.href,
-					anchors = evaluate(
-						"//a[contains(@href,'delete') or contains(@href,'terminate') or contains(@href,'start')]",
-						document.body
-					) as HTMLAnchorElement[];
-				anchors.forEach((anchor) => {
-					anchor.innerText = strings.SUBMITING;
-					anchor.href = '#';
-				});
-				await fetch(href);
-			};
-		for (const form of document.getElementsByTagName('form')) {
-			form.onsubmit = submit;
-		}
-		for (const e of document.getElementsByTagName('a')) {
-			const a = e as HTMLAnchorElement;
-			if (
-				a.href.includes('delete') ||
-				a.href.includes('start') ||
-				a.href.includes('terminate')
-			) {
-				a.onclick = click;
-			}
-		}
-	});
 </script>
 
 <svelte:head>
@@ -100,6 +33,10 @@
 	<meta property="keywords" content={strings.KEYWORDS.join(', ')} />
 	<meta name="google-site-verification" content={gsiteVerification} />
 </svelte:head>
+
+{#if $navigating}
+	<LoadingBar />
+{/if}
 
 <article>
 	<section>

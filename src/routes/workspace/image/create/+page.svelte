@@ -1,5 +1,4 @@
 <script lang="ts">
-	import patterns from '$lib/constants/patterns';
 	import strings from '$lib/constants/strings';
 	import type { PageServerData } from './$types';
 	export let data: PageServerData;

@@ -47,9 +47,3 @@
 	</label>
 	<input type="submit" value={strings.CREATE_INSTANCE} />
 </form>
-
-<style>
-	form {
-		padding: 1em 0;
-	}
-</style>
