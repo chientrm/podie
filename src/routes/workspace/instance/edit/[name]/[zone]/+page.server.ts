@@ -3,7 +3,7 @@ import routes from '$lib/constants/routes';
 import { get_instances, put_instances } from '$lib/helpers/cloudflare';
 import { list_machine_types } from '$lib/helpers/gcp';
 import { redirect } from '@sveltejs/kit';
-import type { Action, PageServerLoad } from './$types';
+import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals, params }) => {
 	const { name, zone } = params,
@@ -19,18 +19,20 @@ export const load: PageServerLoad = async ({ locals, params }) => {
 	);
 };
 
-export const POST: Action = async ({ request, locals, params }) => {
-	const { name } = params,
-		key = podie.USER.GH(locals.user!.gh!.id).KEY,
-		for_form = request.formData().then((formData) => ({
-			machine_type: formData.get('machine_type')! as string
-		})),
-		for_instances = get_instances(locals.PODIE, key);
-	await Promise.all([for_form, for_instances]).then(
-		([{ machine_type }, instances]) => {
-			instances[name]!.machine_type = machine_type;
-			return put_instances(locals.PODIE, key, instances);
-		}
-	);
-	throw redirect(302, routes.WORKSPACE.INSTANCES.LIST);
+export const actions: Actions = {
+	default: async ({ request, locals, params }) => {
+		const { name } = params,
+			key = podie.USER.GH(locals.user!.gh!.id).KEY,
+			for_form = request.formData().then((formData) => ({
+				machine_type: formData.get('machine_type')! as string
+			})),
+			for_instances = get_instances(locals.PODIE, key);
+		await Promise.all([for_form, for_instances]).then(
+			([{ machine_type }, instances]) => {
+				instances[name]!.machine_type = machine_type;
+				return put_instances(locals.PODIE, key, instances);
+			}
+		);
+		throw redirect(303, routes.WORKSPACE.INSTANCES.LIST);
+	}
 };

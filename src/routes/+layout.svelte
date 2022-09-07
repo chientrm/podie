@@ -11,6 +11,8 @@
 	import GithubCircle from 'svelte-material-icons/GithubCircle.svelte';
 	import '../app.css';
 	import type { LayoutServerData } from './$types';
+	import { navigating } from '$app/stores';
+	import LoadingBar from '$lib/components/LoadingBar.svelte';
 	export let data: LayoutServerData;
 
 	const gsiteVerification = 'gG8WXVPtqVVAJlnJb5v0LlC0-HBSCVSWsVqa7KHwTPA';
@@ -31,6 +33,10 @@
 	<meta property="keywords" content={strings.KEYWORDS.join(', ')} />
 	<meta name="google-site-verification" content={gsiteVerification} />
 </svelte:head>
+
+{#if $navigating}
+	<LoadingBar />
+{/if}
 
 <article>
 	<section>
