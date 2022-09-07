@@ -161,6 +161,7 @@ const scopes = [
 				'wget https://github.com/tsl0922/ttyd/releases/download/1.7.1/ttyd.x86_64',
 				'mv ttyd.x86_64 /usr/local//bin/ttyd',
 				'chmod +x /usr/local/bin/ttyd',
+				`echo "set-option -g mouse on" > /home/${gh.login}/.tmux.conf`,
 				..._set_status('cloning'),
 				`rm -rf /home/${gh.login}/${repo_name}`,
 				`sudo -u chientrm bash -c "git clone --branch ${branch} https://${gh.access_token}@github.com/${org}/${repo_name} /home/${gh.login}/${repo_name}"`,
