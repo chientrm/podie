@@ -14,5 +14,5 @@ export const GET: RequestHandler = async ({ url, cookies }) => {
 			gh: { id, access_token, login, html_url, name, email }
 		}));
 	set_user(cookies, await encrypt(user));
-	throw redirect(302, routes.REDIRECT);
+	throw redirect(303, routes.REDIRECT);
 };
