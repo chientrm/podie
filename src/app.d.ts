@@ -33,10 +33,6 @@ declare namespace Podie {
 		machine_type: string;
 	}
 	type Instances = Record<string, Instance>;
-	interface Profile {
-		name: string;
-		email: string;
-	}
 	interface Integrations {
 		gcp_pid?: string;
 	}
