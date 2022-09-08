@@ -3,7 +3,7 @@
 	import strings from '$lib/constants/strings';
 	import GithubCircle from 'svelte-material-icons/GithubCircle.svelte';
 	import { client_id } from '$lib/configs/github.json';
-	const scope = ['repo', 'read:user', 'user:email'].join(' ');
+	const scope = ['repo', 'read:user', 'user:email', 'workflow'].join(' ');
 </script>
 
 <section>

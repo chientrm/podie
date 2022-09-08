@@ -1,6 +1,6 @@
 import podie from '$lib/constants/podie';
 import { list_instances, open_all_ports } from '$lib/helpers/gcp';
-import type { Action, PageServerLoad } from './$types';
+import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals }) => {
 	const id = podie.USER.GH(locals.user!.gh!.id).GCP.PID;
@@ -16,4 +16,6 @@ export const load: PageServerLoad = async ({ locals }) => {
 	return { id, message };
 };
 
-export const POST: Action = ({}) => {};
+export const actions: Actions = {
+	default: () => {}
+};
