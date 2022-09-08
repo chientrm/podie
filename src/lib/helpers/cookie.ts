@@ -1,6 +1,6 @@
 import type { Cookies } from '@sveltejs/kit';
 
-const USER = 'user_1',
+const USER = 'user_2',
 	set = ({
 		cookies,
 		name,
