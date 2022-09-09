@@ -1,18 +1,15 @@
 <script lang="ts">
-	import { page } from '$app/stores';
+	import { navigating, page } from '$app/stores';
 	import Anchor from '$lib/components/Anchor.svelte';
 	import ExternalAnchor from '$lib/components/ExternalAnchor.svelte';
+	import LoadingBar from '$lib/components/LoadingBar.svelte';
 	import routes from '$lib/constants/routes';
 	import strings from '$lib/constants/strings';
 	import logo from '$lib/images/logo.png';
 	import favicon from '$lib/images/logo.svg';
 	import 'modern-normalize/modern-normalize.css';
-	import Discord from 'svelte-material-icons/Discord.svelte';
-	import GithubCircle from 'svelte-material-icons/GithubCircle.svelte';
 	import '../app.css';
 	import type { LayoutServerData } from './$types';
-	import { navigating } from '$app/stores';
-	import LoadingBar from '$lib/components/LoadingBar.svelte';
 	export let data: LayoutServerData;
 
 	const gsiteVerification = 'gG8WXVPtqVVAJlnJb5v0LlC0-HBSCVSWsVqa7KHwTPA';
@@ -43,8 +40,12 @@
 		<header>
 			<Anchor href={routes.HOME}><h2>{strings.PODIE}</h2></Anchor>
 			<div>
-				<a href={routes.GITHUB.PODIE_REPO} target="_blank"><GithubCircle /></a>
-				<a href={routes.DISCORD} target="_blank"><Discord /></a>
+				<a href={routes.GITHUB.PODIE_REPO} target="_blank">
+					<img src={routes.GITHUB.BADGE} alt={strings.GITHUB} />
+				</a>
+				<a href={routes.DISCORD.INVITE} target="_blank">
+					<img src={routes.DISCORD.BADGE} alt={strings.DISCORD} />
+				</a>
 				{#if data.user}
 					{#if data.user.gh}
 						<ExternalAnchor
@@ -68,9 +69,11 @@
 	</section>
 	<footer>
 		<Anchor href={routes.PRIVACY_POLICY}>{strings.PRIVACY_POLICY}</Anchor>
-		<Anchor href={routes.TERMS_AND_CONDITIONS}
-			>{strings.TERMS_AND_CONDITIONS}</Anchor
-		>
+		<Anchor href={routes.TERMS_AND_CONDITIONS}>
+			{strings.TERMS_AND_CONDITIONS}
+		</Anchor>
+		<a href={routes.DISCORD} target="_blank">{strings.DISCORD}</a>
+		<a href={routes.GITHUB.PODIE_REPO} target="_blank">{strings.GITHUB}</a>
 	</footer>
 </article>
 

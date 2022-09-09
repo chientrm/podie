@@ -19,6 +19,15 @@ const kv = (record: Record<string, string>) => ({
 	get_instances = async (kv: KVNamespace, key: string) =>
 		(await get<Podie.Instances>(kv, INSTANCES, key)) || {},
 	put_instances = (kv: KVNamespace, key: string, value: Podie.Instances) =>
-		put(kv, INSTANCES, key, value);
-
-export { kv, get_ssh_keys, put_ssh_keys, get_instances, put_instances };
+		put(kv, INSTANCES, key, value),
+	LET_US_KNOW = 'let_us_know',
+	put_let_us_know = (kv: KVNamespace, key: string, value: string) =>
+		put(kv, LET_US_KNOW, key, value);
+export {
+	kv,
+	get_ssh_keys,
+	put_ssh_keys,
+	get_instances,
+	put_instances,
+	put_let_us_know
+};
