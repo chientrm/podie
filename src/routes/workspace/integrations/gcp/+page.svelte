@@ -12,15 +12,18 @@
 		Create <a href={routes.GCP.PROJECT_CREATE} target="_blank">
 			{strings.NEW_GCP_PROJECT}
 		</a>
-		with ID "{data.id}"
+		with ID "{data.project}"
 	</li>
 	<li>
-		Enable <a href={routes.GCP.PROJECT(data.id).COMPUTE_API} target="_blank">
+		Enable <a
+			href={routes.GCP.PROJECT(data.project).COMPUTE_API}
+			target="_blank"
+		>
 			Compute API
 		</a>
 	</li>
 	<li>
-		Go to <a href={routes.GCP.PROJECT(data.id).IAM} target="_blank">
+		Go to <a href={routes.GCP.PROJECT(data.project).IAM} target="_blank">
 			{strings.GOOGLE_IAM}
 		</a> tab
 	</li>
