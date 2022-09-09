@@ -80,5 +80,6 @@ export default {
 	STATUS: 'Status',
 	UPDATE: 'Update',
 	CHANGE_MACHINE_TYPE: 'Change machine type',
-	NEXT: 'Next'
+	NEXT: 'Next',
+	DISCORD: 'Discord'
 };

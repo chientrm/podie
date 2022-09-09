@@ -87,6 +87,7 @@ export default {
 		GET: `/thank/${email}`
 	}),
 	GITHUB: {
+		BADGE: 'https://img.shields.io/github/stars/chientrm/podie?style=social',
 		PODIE_REPO: 'https://github.com/chientrm/podie',
 		AUTHORIZE: ({ client_id, scope }: { client_id: string; scope: string }) => {
 			const url = new URL('https://github.com/login/oauth/authorize');
@@ -161,5 +162,8 @@ export default {
 	PRIVACY_POLICY: '/privacy_policy',
 	TERMS_AND_CONDITIONS: '/terms_and_conditions',
 	REDIRECT: '/redirect',
-	DISCORD: 'https://discord.gg/SgEGsSKmKb'
+	DISCORD: {
+	INVITE:  'https://discord.gg/SgEGsSKmKb',
+		BADGE: 'https://img.shields.io/discord/1015460429755060384'
+	}
 };
