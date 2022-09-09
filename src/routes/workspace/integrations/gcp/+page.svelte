@@ -47,6 +47,7 @@
 		</form>
 		{#if data.message}
 			{data.message}
+			<i>Please test several times till `Connected`</i>
 		{:else}
 			<p class="success">Connected</p>
 		{/if}

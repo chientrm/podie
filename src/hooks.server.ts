@@ -2,7 +2,7 @@ import { dsn, environment } from '$lib/configs/sentry.json';
 import { kv } from '$lib/helpers/cloudflare';
 import { get_user } from '$lib/helpers/cookie';
 import { decrypt } from '$lib/helpers/encryption';
-import type { Handle, HandleError } from '@sveltejs/kit';
+import type { Handle, HandleServerError } from '@sveltejs/kit';
 import Toucan from 'toucan-js';
 
 const podie: Record<string, string> = {};
@@ -18,7 +18,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 	return resolve(event);
 };
 
-export const handleError: HandleError = ({ error, event }) => {
+export const handleError: HandleServerError = ({ error, event }) => {
 	const { request } = event,
 		sentry = new Toucan({
 			dsn,
